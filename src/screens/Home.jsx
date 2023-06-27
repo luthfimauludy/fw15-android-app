@@ -5,10 +5,12 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 
+const galery = require('../assets/img/galery.jpg');
 const Home = () => {
   const navigation = useNavigation();
   const [text, onChangeText] = React.useState('');
@@ -58,6 +60,17 @@ const Home = () => {
               <Text style={styles.headText}>Events For You</Text>
               <Text>Sort</Text>
             </View>
+            <TouchableOpacity onPress={() => navigation.navigate('Event')}>
+              <View style={{position: 'relative'}}>
+                <Image source={galery} style={styles.galeryImg} />
+                <View style={styles.eventText}>
+                  <Text style={styles.eventDate}>Wed, 15 Nov, 4:00 PM</Text>
+                  <Text style={styles.eventTitle}>
+                    Sights & Sounds Exhibition
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -119,23 +132,50 @@ const styles = StyleSheet.create({
     gap: 40,
   },
   mainContent: {
-    flex: 1,
+    height: '100%',
+    width: '100%',
+    flexDirection: 'column',
+    gap: 20,
     backgroundColor: 'white',
     borderTopStartRadius: 40,
     borderTopEndRadius: 40,
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     paddingTop: 20,
   },
   mainHead: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 110,
   },
   headText: {
     fontWeight: 'bold',
     fontSize: 20,
     lineHeight: 30,
     letterSpacing: 1,
+  },
+  galeryImg: {
+    width: '50%',
+    height: '90%',
+    borderRadius: 20,
+    resizeMode: 'cover',
+  },
+  eventText: {
+    position: 'absolute',
+    width: '50%',
+    bottom: 80,
+    left: 10,
+  },
+  eventDate: {
+    fontSize: 10,
+    fontWeight: '500',
+    lineHeight: 27,
+    color: 'white',
+  },
+  eventTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    color: 'white',
   },
 });
 
