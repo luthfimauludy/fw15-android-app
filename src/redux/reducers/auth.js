@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {asyncLogin} from '../actions/auth';
 
 const initialState = {
   token: null,
@@ -14,6 +15,11 @@ const auth = createSlice({
     clearAuthState: () => {
       return initialState;
     },
+  },
+  extraReducers: builder => {
+    builder.addCase(asyncLogin.fulfilled, (state, action) => {
+      state.token = action.payload;
+    });
   },
 });
 
