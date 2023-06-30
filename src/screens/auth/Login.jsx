@@ -8,15 +8,25 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {asyncLogin} from '../../redux/actions/auth';
 import Alert from '../../components/Alert';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email('Email is invalid')
+    .required('Email cannot be empty'),
+  password: Yup.string().required('Password cannot be empty'),
+});
 
 const Login = () => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  // const [email, setEmail] = React.useState('');
+  // const [password, setPassword] = React.useState('');
   const dispatch = useDispatch();
   const errorMessage = useSelector(state => state.auth.errorMessage);
 
-  const doLogin = () => {
-    dispatch(asyncLogin({email, password}));
+  const doLogin = values => {
+    // dispatch(asyncLogin({email, password}));
+    dispatch(asyncLogin({values}));
   };
   return (
     <View style={styles.wrapper}>
@@ -31,37 +41,70 @@ const Login = () => {
         </View>
       </View>
       {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
-      <View style={styles.gap10}>
-        <Input
-          onChangeText={setEmail}
-          placeholder="Email"
-          keyboardType="email-address"
-        />
-        <Input
-          onChangeText={setPassword}
-          placeholder="Password"
-          secureTextEntry
-        />
-      </View>
-      <View style={styles.alignRight}>
-        <Link to="/ForgotPassword" style={globalStyles.link}>
-          Forgot Password?
-        </Link>
-      </View>
-      <View>
-        <Button onPress={doLogin}>Login</Button>
-      </View>
-      <View style={styles.gap10}>
-        <Text style={styles.signinWithText}>or sign in with</Text>
-        <View style={styles.flexRow}>
-          <View style={styles.loginWith}>
-            <Icon name="google" size={20} />
-          </View>
-          <View style={styles.loginWith}>
-            <Icon name="facebook" size={20} />
-          </View>
-        </View>
-      </View>
+      <Formik
+        initialValues={{
+          email: '',
+          password: '',
+        }}
+        validationSchema={validationSchema}
+        onSubmit={doLogin}>
+        {({
+          handleBlur,
+          handleChange,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+        }) => (
+          <>
+            <View style={styles.gap10}>
+              <Input
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                placeholder="Email"
+                keyboardType="email-address"
+                value={values.email}
+              />
+              {errors.email && touched.email && (
+                <Text style={globalStyles.textError}>{errors.email}</Text>
+              )}
+              <Input
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                placeholder="Password"
+                secureTextEntry
+                value={values.password}
+              />
+              {errors.password && touched.password && (
+                <Text style={globalStyles.textError}>{errors.password}</Text>
+              )}
+            </View>
+            <View style={styles.alignRight}>
+              <Link to="/ForgotPassword" style={globalStyles.link}>
+                Forgot Password?
+              </Link>
+            </View>
+            <View>
+              <Button
+                disabled={!touched.email && !touched.password}
+                onPress={handleSubmit}>
+                Login
+              </Button>
+            </View>
+            <View style={styles.gap10}>
+              <Text style={styles.signinWithText}>or sign in with</Text>
+              <View style={styles.flexRow}>
+                <View style={styles.loginWith}>
+                  <Icon name="google" size={20} />
+                </View>
+                <View style={styles.loginWith}>
+                  <Icon name="facebook" size={20} />
+                </View>
+              </View>
+            </View>
+          </>
+        )}
+      </Formik>
     </View>
   );
 };
