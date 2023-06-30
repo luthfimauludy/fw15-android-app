@@ -5,8 +5,19 @@ import globalStyles from '../../assets/globalStyles';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useDispatch, useSelector} from 'react-redux';
+import {asyncLogin} from '../../redux/actions/auth';
+import Alert from '../../components/Alert';
 
 const Login = () => {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const dispatch = useDispatch();
+  const errorMessage = useSelector(state => state.auth.errorMessage);
+
+  const doLogin = () => {
+    dispatch(asyncLogin({email, password}));
+  };
   return (
     <View style={styles.wrapper}>
       <View style={styles.headTitle}>
@@ -19,11 +30,16 @@ const Login = () => {
           </Text>
         </View>
       </View>
+      {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
       <View style={styles.gap10}>
-        <Input placeholder="Email" keyboardType="email-address" />
         <Input
+          onChangeText={setEmail}
+          placeholder="Email"
+          keyboardType="email-address"
+        />
+        <Input
+          onChangeText={setPassword}
           placeholder="Password"
-          keyboardType="number-pad"
           secureTextEntry
         />
       </View>
@@ -33,7 +49,7 @@ const Login = () => {
         </Link>
       </View>
       <View>
-        <Button>Login</Button>
+        <Button onPress={doLogin}>Login</Button>
       </View>
       <View style={styles.gap10}>
         <Text style={styles.signinWithText}>or sign in with</Text>
