@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
+import {Link} from '@react-navigation/native';
+import Button from '../components/Button';
 
 const galery = require('../assets/img/galery.jpg');
 const maps = require('../assets/img/maps.png');
@@ -15,16 +17,18 @@ const Event = () => {
   return (
     <ScrollView style={styles.wrapper}>
       <ImageBackground source={galery} style={styles.imgBackground}>
-        <View style={{paddingTop: 100}}>
+        <View style={styles.paddingTop50}>
           <View style={styles.eventBanner}>
             <View>
-              <Text style={styles.eventTitle}>Sights & Sounds Exhibition</Text>
+              <Link to="/Booking" style={styles.eventTitle}>
+                Sights & Sounds Exhibition
+              </Link>
             </View>
-            <View style={{flexDirection: 'row', gap: 5, alignItems: 'center'}}>
+            <View style={styles.eventInfo}>
               <Icon name="map-pin" size={25} color="#FC1055" />
               <Text style={styles.whiteText}>Jakarta, Indonesia</Text>
             </View>
-            <View style={{flexDirection: 'row', gap: 5, alignItems: 'center'}}>
+            <View style={styles.eventInfo}>
               <Icon name="clock" size={25} color="#FC1055" />
               <Text style={styles.whiteText}>Wed, 15 Nov, 4:00 PM</Text>
             </View>
@@ -44,6 +48,9 @@ const Event = () => {
               <Text style={styles.headText}>Location</Text>
               <Image source={maps} />
             </View>
+            <View>
+              <Button>Buy Tickets</Button>
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -54,6 +61,9 @@ const Event = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+  },
+  paddingTop50: {
+    paddingTop: 50,
   },
   imgBackground: {
     flex: 1,
@@ -71,6 +81,11 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     letterSpacing: 2,
     color: 'white',
+  },
+  eventInfo: {
+    flexDirection: 'row',
+    gap: 5,
+    alignItems: 'center',
   },
   whiteText: {
     fontSize: 14,
