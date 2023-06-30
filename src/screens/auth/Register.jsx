@@ -24,16 +24,8 @@ const Signup = () => {
       <View style={styles.formGap}>
         <Input placeholder="Full Name" />
         <Input placeholder="Email" keyboardType="email-address" />
-        <Input
-          placeholder="Password"
-          keyboardType="number-pad"
-          secureTextEntry
-        />
-        <Input
-          placeholder="Confirm Password"
-          keyboardType="number-pad"
-          secureTextEntry
-        />
+        <Input placeholder="Password" secureTextEntry />
+        <Input placeholder="Confirm Password" secureTextEntry />
       </View>
       <View style={styles.checkboxContainer}>
         <Text style={styles.checkboxLabel}>Accept terms and condition</Text>

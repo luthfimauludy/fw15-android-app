@@ -19,16 +19,8 @@ const ResetPassword = () => {
       </View>
       <View style={styles.gap10}>
         <Input placeholder="Email" keyboardType="email-address" />
-        <Input
-          placeholder="New Password"
-          keyboardType="number-pad"
-          secureTextEntry
-        />
-        <Input
-          placeholder="Confirm Password"
-          keyboardType="number-pad"
-          secureTextEntry
-        />
+        <Input placeholder="New Password" secureTextEntry />
+        <Input placeholder="Confirm Password" secureTextEntry />
       </View>
       <View>
         <Button>Continue</Button>
