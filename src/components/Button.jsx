@@ -2,10 +2,18 @@ import {Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import globalStyles from '../assets/globalStyles';
 
-const Button = ({children, ...rest}) => {
+const Button = ({children, disabled, ...rest}) => {
   return (
-    <TouchableOpacity {...rest} style={globalStyles.btn}>
-      <Text style={globalStyles.btnText}>{children}</Text>
+    <TouchableOpacity
+      {...rest}
+      style={[globalStyles.btn, disabled && globalStyles.btnDisabled]}>
+      <Text
+        style={[
+          globalStyles.btnText,
+          disabled && globalStyles.btnDisabledText,
+        ]}>
+        {children}
+      </Text>
     </TouchableOpacity>
   );
 };
