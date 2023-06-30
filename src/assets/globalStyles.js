@@ -15,6 +15,12 @@ const globalStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  btnDisabled: {
+    backgroundColor: '#AAA',
+  },
+  btnDisabledText: {
+    color: '#888',
+  },
   title: {
     color: '#373A42',
     fontSize: 24,
@@ -41,6 +47,9 @@ const globalStyles = StyleSheet.create({
   link: {
     color: '#61764b',
     fontWeight: 'bold',
+  },
+  textError: {
+    color: '#FF0000',
   },
 });
 
