@@ -10,7 +10,7 @@ export const asyncLogin = createAsyncThunk(
       form.append('password', payload.password);
 
       const {data} = await http().post('/auth/login', form.toString());
-      return data.result.token;
+      return data.results.token;
     } catch (err) {
       const message = err?.response?.data?.message;
       if (message) {
