@@ -9,10 +9,13 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {logout} from '../redux/reducers/auth';
 
 const galery = require('../assets/img/galery.jpg');
 const Home = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [text, onChangeText] = React.useState('');
   return (
     <View style={styles.wrapper}>
@@ -20,7 +23,9 @@ const Home = () => {
         <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
           <Text style={styles.whiteText}>Menu</Text>
         </TouchableOpacity>
-        <Text style={styles.whiteText}>Chat</Text>
+        <TouchableOpacity onPress={() => dispatch(logout())}>
+          <Text style={styles.whiteText}>Logout</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.flex1}>
         <SafeAreaView style={styles.ph10}>
