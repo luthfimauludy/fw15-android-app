@@ -13,6 +13,9 @@ const auth = createSlice({
     login: (state, action) => {
       state.token = action.payload;
     },
+    clearMessage: state => {
+      state.errorMessage = '';
+    },
     logout: () => {
       return initialState;
     },
@@ -30,5 +33,5 @@ const auth = createSlice({
   },
 });
 
-export const {login, logout} = auth.actions;
+export const {login, logout, clearMessage} = auth.actions;
 export default auth.reducer;

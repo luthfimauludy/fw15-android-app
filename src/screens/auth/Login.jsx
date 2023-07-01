@@ -10,6 +10,7 @@ import {asyncLogin} from '../../redux/actions/auth';
 import Alert from '../../components/Alert';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {clearMessage} from '../../redux/reducers/auth';
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -24,9 +25,14 @@ const Login = () => {
   const dispatch = useDispatch();
   const errorMessage = useSelector(state => state.auth.errorMessage);
 
+  React.useEffect(() => {
+    dispatch(clearMessage());
+  }, [dispatch]);
+
   const doLogin = values => {
     // dispatch(asyncLogin({email, password}));
-    dispatch(asyncLogin({values}));
+    dispatch(clearMessage());
+    dispatch(asyncLogin(values));
   };
   return (
     <View style={styles.wrapper}>
