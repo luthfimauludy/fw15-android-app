@@ -8,24 +8,24 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
-import {logout} from '../redux/reducers/auth';
+// import {useDispatch} from 'react-redux';
+// import {logout} from '../redux/reducers/auth';
 
 const galery = require('../assets/img/galery.jpg');
 const Home = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [text, onChangeText] = React.useState('');
   return (
     <View style={styles.wrapper}>
-      <View style={styles.nav}>
+      {/* <View style={styles.nav}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Text style={styles.whiteText}>Menu</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => dispatch(logout())}>
           <Text style={styles.whiteText}>Logout</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <View style={styles.flex1}>
         <View style={styles.ph10}>
           <TextInput
@@ -87,6 +87,7 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   wrapper: {
+    paddingTop: 30,
     flex: 1,
     backgroundColor: '#61764b',
   },
