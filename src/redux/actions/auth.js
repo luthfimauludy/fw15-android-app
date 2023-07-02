@@ -21,3 +21,21 @@ export const asyncLogin = createAsyncThunk(
     }
   },
 );
+
+export const asyncRegister = createAsyncThunk(
+  'asyncRegister',
+  async (payload, {rejectWithValue}) => {
+    try {
+      const body = new URLSearchParams(payload).toString();
+      const {data} = await http().post('/auth/register', body);
+      return data.message;
+    } catch (err) {
+      const message = err?.response?.data?.message;
+      if (message) {
+        return rejectWithValue(message);
+      } else {
+        return rejectWithValue(err.message);
+      }
+    }
+  },
+);
