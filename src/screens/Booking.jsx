@@ -1,12 +1,22 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Button from '../components/Button';
+import {useNavigation} from '@react-navigation/native';
 
 const booking = require('../assets/img/Booking.png');
 const swap = require('../assets/img/swap.png');
 const Booking = () => {
+  const navigation = useNavigation();
   return (
-    <View style={styles.wrapper}>
+    <ScrollView style={styles.wrapper}>
       <View style={styles.bookingImg}>
         <Image source={booking} />
       </View>
@@ -23,7 +33,7 @@ const Booking = () => {
         <View style={styles.paddingTop30}>
           <View>
             <View style={styles.gap20}>
-              <Image source={swap} />
+              <Icon name="ticket" size={30} />
               <View style={styles.sectionTicket}>
                 <View>
                   <Text style={styles.text14}>SECTION REG, ROW 1</Text>
@@ -48,7 +58,7 @@ const Booking = () => {
           </View>
           <View>
             <View style={styles.gap20}>
-              <Image source={swap} />
+              <Icon name="ticket" size={30} />
               <View style={styles.sectionTicket}>
                 <View>
                   <Text style={styles.text14}>SECTION VIP, ROW 2</Text>
@@ -71,9 +81,46 @@ const Booking = () => {
               </View>
             </View>
           </View>
+          <View>
+            <View style={styles.gap20}>
+              <Icon name="ticket" size={30} />
+              <View style={styles.sectionTicket}>
+                <View>
+                  <Text style={styles.text14}>SECTION VVIP, ROW 3</Text>
+                  <Text style={styles.text12}>6 Seats available</Text>
+                </View>
+                <View style={styles.alignCenter}>
+                  <Text style={styles.text14}>$50</Text>
+                  <Text style={styles.text12}>per person</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.quantityText}>
+              <Text style={styles.text14}>Quantity</Text>
+              <View>
+                <View style={styles.buttonQty}>
+                  <Icon name="minus-square-o" size={30} />
+                  <Text style={styles.text14}>0</Text>
+                  <Icon name="plus-square-o" size={30} />
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View style={styles.checkoutContent}>
+          <View style={styles.alignCenter}>
+            <Text style={styles.textBlack}>VIP 2 $70</Text>
+            <Text style={styles.text12}>Get now on Urticket</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.btnCheckout}
+            onPress={() => navigation.navigate('Payment')}>
+            <Text>Checkout</Text>
+            {/* <Button>Checkout</Button> */}
+          </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -114,6 +161,9 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     letterSpacing: 1,
   },
+  textBlack: {
+    color: 'black',
+  },
   spaceBetween: {
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -126,10 +176,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   alignCenter: {
-    alignItems: 'center',
-  },
-  flexRow: {
-    flexDirection: 'row',
     alignItems: 'center',
   },
   sectionTicket: {
@@ -152,6 +198,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 20,
     alignItems: 'center',
+  },
+  checkoutContent: {
+    width: 'auto',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+  },
+  btnCheckout: {
+    width: '50%',
   },
 });
 
