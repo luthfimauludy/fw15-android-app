@@ -13,7 +13,7 @@ import Button from '../components/Button';
 
 const galery = require('../assets/img/galery.jpg');
 const maps = require('../assets/img/maps.png');
-const Event = () => {
+const DetailEvent = () => {
   return (
     <ScrollView style={styles.wrapper}>
       <ImageBackground source={galery} style={styles.imgBackground}>
@@ -120,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Event;
+export default DetailEvent;
