@@ -9,6 +9,13 @@ const Alert = ({variant, children}) => {
       </View>
     );
   }
+  if (variant === 'success') {
+    return (
+      <View style={styles.successWrapper}>
+        <Text style={styles.successText}>{children}</Text>
+      </View>
+    );
+  }
   return (
     <View style={styles.wrapper}>
       <Text style={styles.text}>{children}</Text>
@@ -28,6 +35,18 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
+  },
+  successWrapper: {
+    backgroundColor: '#2edb6b',
+    borderWidth: 1,
+    borderColor: 'green',
+    paddingHorizontal: 25,
+    borderRadius: 15,
+    height: 45,
+    justifyContent: 'center',
+  },
+  successText: {
+    color: 'green',
   },
   wrapper: {
     backgroundColor: '#BFBFBF',
