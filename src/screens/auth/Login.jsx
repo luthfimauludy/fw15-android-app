@@ -42,7 +42,10 @@ const Login = () => {
         </View>
         <View>
           <Text style={globalStyles.subTitle}>
-            Hi, Welcome back to Urticket!
+            Hi, Welcome back to Urticket!{' '}
+            <Link to="/Register" style={globalStyles.link}>
+              Register Now
+            </Link>
           </Text>
         </View>
       </View>
@@ -64,26 +67,30 @@ const Login = () => {
         }) => (
           <>
             <View style={styles.gap10}>
-              <Input
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                placeholder="Email"
-                keyboardType="email-address"
-                value={values.email}
-              />
-              {errors.email && touched.email && (
-                <Text style={globalStyles.textError}>{errors.email}</Text>
-              )}
-              <Input
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                placeholder="Password"
-                secureTextEntry
-                value={values.password}
-              />
-              {errors.password && touched.password && (
-                <Text style={globalStyles.textError}>{errors.password}</Text>
-              )}
+              <View>
+                <Input
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  placeholder="Email"
+                  keyboardType="email-address"
+                  value={values.email}
+                />
+                {errors.email && touched.email && (
+                  <Text style={globalStyles.textError}>{errors.email}</Text>
+                )}
+              </View>
+              <View>
+                <Input
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  placeholder="Password"
+                  secureTextEntry
+                  value={values.password}
+                />
+                {errors.password && touched.password && (
+                  <Text style={globalStyles.textError}>{errors.password}</Text>
+                )}
+              </View>
             </View>
             <View style={styles.alignRight}>
               <Link to="/ForgotPassword" style={globalStyles.link}>
