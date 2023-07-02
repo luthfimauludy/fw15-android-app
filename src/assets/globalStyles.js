@@ -50,6 +50,8 @@ const globalStyles = StyleSheet.create({
   },
   textError: {
     color: '#FF0000',
+    fontSize: 12,
+    paddingLeft: 10,
   },
 });
 
