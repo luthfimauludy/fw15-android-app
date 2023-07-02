@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TextInput,
   TouchableOpacity,
   Image,
@@ -20,7 +19,7 @@ const Home = () => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.nav}>
-        <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Text style={styles.whiteText}>Menu</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => dispatch(logout())}>
@@ -28,7 +27,7 @@ const Home = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.flex1}>
-        <SafeAreaView style={styles.ph10}>
+        <View style={styles.ph10}>
           <TextInput
             style={styles.input}
             onChange={onChangeText}
@@ -36,7 +35,7 @@ const Home = () => {
             placeholder="Search Event..."
             placeholderTextColor="#C1C5D0"
           />
-        </SafeAreaView>
+        </View>
         <View style={styles.date}>
           <View style={styles.flexRow}>
             <View>
@@ -65,17 +64,20 @@ const Home = () => {
               <Text style={styles.headText}>Events For You</Text>
               <Text>Sort</Text>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Event')}>
-              <View style={{position: 'relative'}}>
-                <Image source={galery} style={styles.galeryImg} />
-                <View style={styles.eventText}>
-                  <Text style={styles.eventDate}>Wed, 15 Nov, 4:00 PM</Text>
-                  <Text style={styles.eventTitle}>
-                    Sights & Sounds Exhibition
-                  </Text>
+            <View>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('DetailEvent')}>
+                <View style={styles.relative}>
+                  <Image source={galery} style={styles.galeryImg} />
+                  <View style={styles.eventText}>
+                    <Text style={styles.eventDate}>Wed, 15 Nov, 4:00 PM</Text>
+                    <Text style={styles.eventTitle}>
+                      Sights & Sounds Exhibition
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -87,6 +89,9 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#61764b',
+  },
+  relative: {
+    position: 'relative',
   },
   ph10: {
     paddingHorizontal: 10,
@@ -114,7 +119,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   date: {
-    flex: 2,
+    flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
     gap: 30,
@@ -153,6 +158,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headText: {
+    color: '#373A42',
     fontWeight: 'bold',
     fontSize: 20,
     lineHeight: 30,
@@ -181,6 +187,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 2,
     color: 'white',
+  },
+  dataEvent: {
+    flexDirection: 'row',
+    gap: 10,
   },
 });
 
