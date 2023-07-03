@@ -4,12 +4,14 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from '../components/Button';
 import {useNavigation} from '@react-navigation/native';
 
+const card = require('../assets/img/card.png');
 const Payment = () => {
   const navigation = useNavigation();
   return (
@@ -32,7 +34,7 @@ const Payment = () => {
               </View>
               <View style={styles.cardContains}>
                 <View style={styles.cardOutput}>
-                  <Text>Card</Text>
+                  <Image source={card} />
                 </View>
                 <View style={styles.plusIcon}>
                   <Text>+</Text>
@@ -148,12 +150,7 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   cardOutput: {
-    width: 230,
-    height: 130,
-    backgroundColor: '#FFA000',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 260,
   },
   cardContains: {
     flexDirection: 'row',
