@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import {Link} from '@react-navigation/native';
 import globalStyles from '../../assets/globalStyles';
@@ -25,17 +25,18 @@ const Login = () => {
   const dispatch = useDispatch();
   const errorMessage = useSelector(state => state.auth.errorMessage);
 
-  React.useEffect(() => {
-    dispatch(clearMessage());
-  }, [dispatch]);
-
   const doLogin = values => {
-    // dispatch(asyncLogin({email, password}));
-    dispatch(clearMessage());
     dispatch(asyncLogin(values));
   };
+
+  if (errorMessage) {
+    setTimeout(() => {
+      dispatch(clearMessage());
+    }, 3000);
+  }
+
   return (
-    <View style={styles.wrapper}>
+    <ScrollView style={styles.wrapper}>
       <View style={styles.headTitle}>
         <View>
           <Text style={globalStyles.title}>Login</Text>
@@ -97,7 +98,7 @@ const Login = () => {
                 Forgot Password?
               </Link>
             </View>
-            <View>
+            <View style={styles.buttonContain}>
               <Button
                 disabled={!touched.email && !touched.password}
                 onPress={handleSubmit}>
@@ -118,7 +119,7 @@ const Login = () => {
           </>
         )}
       </Formik>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -156,6 +157,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#61764b',
+  },
+  buttonContain: {
+    paddingTop: 20,
   },
 });
 

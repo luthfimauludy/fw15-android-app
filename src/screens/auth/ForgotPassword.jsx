@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import globalStyles from '../../assets/globalStyles';
 import Input from '../../components/Input';
@@ -48,7 +48,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <View style={styles.wrapper}>
+    <ScrollView style={styles.wrapper}>
       <View style={styles.headTitle}>
         <View>
           <Text style={globalStyles.title}>Forgot Password</Text>
@@ -86,13 +86,13 @@ const ForgotPassword = () => {
                 <Text style={globalStyles.textError}>{errors.email}</Text>
               )}
             </View>
-            <View>
+            <View style={styles.buttonContain}>
               <Button onPress={handleSubmit}>Send</Button>
             </View>
           </>
         )}
       </Formik>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -109,6 +109,9 @@ const styles = StyleSheet.create({
   },
   gap10: {
     gap: 10,
+  },
+  buttonContain: {
+    paddingTop: 20,
   },
 });
 

@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import {Link} from '@react-navigation/native';
 import globalStyles from '../../assets/globalStyles';
@@ -11,6 +11,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {clearMessage} from '../../redux/reducers/auth';
 import {useNavigation} from '@react-navigation/native';
+import Checkbox from '../../components/CheckBox';
 
 const validationSchema = Yup.object({
   fullName: Yup.string()
@@ -46,9 +47,14 @@ const Register = () => {
       navigation.navigate('Login');
     }, 3000);
   }
+  if (errorMessage) {
+    setTimeout(() => {
+      dispatch(clearMessage());
+    }, 3000);
+  }
 
   return (
-    <View style={styles.wrapper}>
+    <ScrollView style={styles.wrapper}>
       <View style={styles.headTitle}>
         <View>
           <Text style={globalStyles.title}>Sign Up</Text>
@@ -134,6 +140,7 @@ const Register = () => {
               </View>
             </View>
             <View style={styles.checkboxContainer}>
+              <Checkbox />
               <Text style={styles.checkboxLabel}>
                 Accept terms and condition
               </Text>
@@ -153,7 +160,7 @@ const Register = () => {
           </>
         )}
       </Formik>
-    </View>
+    </ScrollView>
   );
 };
 
