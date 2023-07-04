@@ -53,6 +53,7 @@ function MyDrawer() {
     <Drawer.Navigator
       screenOptions={{
         headerShadowVisible: false,
+        // headerStyle
         drawerStyle: {
           backgroundColor: '#EAEAEA',
           width: 240,
@@ -62,7 +63,11 @@ function MyDrawer() {
       <Drawer.Screen
         name="SplashScreen"
         component={SplashScreen}
-        options={({drawerLabel: () => null}, {drawerItemStyle: {height: 0}})}
+        options={
+          ({drawerLabel: () => null},
+          {drawerItemStyle: {height: 0}},
+          {headerShown: false})
+        }
       />
       <Drawer.Screen
         name="Home"
@@ -167,7 +172,11 @@ const Main = () => {
       {!token && (
         <AuthStack.Navigator
           screenOptions={{headerShadowVisible: false, headerTitle: ''}}>
-          <Stack.Screen name="SplashScreen" component={SplashScreen} />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="SplashScreen"
+            component={SplashScreen}
+          />
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
