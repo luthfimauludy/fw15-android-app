@@ -7,18 +7,29 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import EventContent from '../components/EventContent';
 import http from '../helpers/http';
+import {useSelector} from 'react-redux';
 
 // const galery = require('../assets/img/galery.jpg');
 const Home = () => {
   const navigation = useNavigation();
   const [events, setEvent] = React.useState([]);
   const [text, onChangeText] = React.useState('');
+  const deviceToken = useSelector(state => state.deviceToken.data);
+  const token = useSelector(state => state.auth.token);
+  const saveToken = useCallback(async () => {
+    const form = new URLSearchParams({token: deviceToken.token}).toString();
+    await http(token).post('/device-token', form);
+  }, [deviceToken, token]);
+
+  React.useEffect(() => {
+    saveToken();
+  }, [saveToken]);
 
   React.useEffect(() => {
     async function getEvent() {

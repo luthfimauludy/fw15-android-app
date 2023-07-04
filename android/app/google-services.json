@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "3733832146",
+    "project_id": "eventix-app",
+    "storage_bucket": "eventix-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3733832146:android:edf88873e7522be7fec80b",
+        "android_client_info": {
+          "package_name": "com.demoapps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3733832146-k4bcd70eo3quan98a9av430utmfhltjb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK7HB4H8hKpwR5WAHWEzHRduVR1rs9LkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3733832146-k4bcd70eo3quan98a9av430utmfhltjb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
