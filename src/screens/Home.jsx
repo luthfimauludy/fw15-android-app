@@ -5,27 +5,39 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-// import {useDispatch} from 'react-redux';
-// import {logout} from '../redux/reducers/auth';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+import EventContent from '../components/EventContent';
+import http from '../helpers/http';
 
-const galery = require('../assets/img/galery.jpg');
+// const galery = require('../assets/img/galery.jpg');
 const Home = () => {
   const navigation = useNavigation();
-  // const dispatch = useDispatch();
+  const [events, setEvent] = React.useState([]);
   const [text, onChangeText] = React.useState('');
+
+  React.useEffect(() => {
+    async function getEvent() {
+      const {data} = await http().get('/event?sort=date&sortBy=asc');
+      setEvent(data.results);
+    }
+    getEvent();
+  }, []);
+
   return (
     <View style={styles.wrapper}>
-      {/* <View style={styles.nav}>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <Text style={styles.whiteText}>Menu</Text>
+      <View style={styles.nav}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Feather name="menu" size={25} color="#FFF" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => dispatch(logout())}>
-          <Text style={styles.whiteText}>Logout</Text>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Feather name="message-square" size={25} color="#FFF" />
         </TouchableOpacity>
-      </View> */}
+      </View>
       <View style={styles.flex1}>
         <View style={styles.ph10}>
           <TextInput
@@ -38,36 +50,56 @@ const Home = () => {
         </View>
         <View style={styles.date}>
           <View style={styles.flexRow}>
-            <View>
-              <Text style={styles.whiteText}>13</Text>
-              <Text style={styles.whiteText}>Mon</Text>
-            </View>
-            <View>
-              <Text style={styles.whiteText}>14</Text>
-              <Text style={styles.whiteText}>Tue</Text>
+            <View style={styles.rowGap40}>
+              <View style={styles.pv10}>
+                <Text style={styles.whiteText}>13</Text>
+                <Text style={styles.whiteText}>Mon</Text>
+              </View>
+              <View style={styles.pv10}>
+                <Text style={styles.whiteText}>14</Text>
+                <Text style={styles.whiteText}>Tue</Text>
+              </View>
             </View>
             <View style={styles.dateBorder}>
-              <Text style={styles.orangeText}>15</Text>
-              <Text style={styles.orangeText}>Wed</Text>
+              <View style={styles.orangeBorder}>
+                <Text style={styles.orangeText}>15</Text>
+                <Text style={styles.orangeText}>Wed</Text>
+              </View>
             </View>
-            <View>
-              <Text style={styles.whiteText}>16</Text>
-              <Text style={styles.whiteText}>Thu</Text>
-            </View>
-            <View>
-              <Text style={styles.whiteText}>17</Text>
-              <Text style={styles.whiteText}>Fri</Text>
+            <View style={styles.rowGap40}>
+              <View style={styles.pv10}>
+                <Text style={styles.whiteText}>16</Text>
+                <Text style={styles.whiteText}>Thu</Text>
+              </View>
+              <View style={styles.pv10}>
+                <Text style={styles.whiteText}>17</Text>
+                <Text style={styles.whiteText}>Fri</Text>
+              </View>
             </View>
           </View>
           <View style={styles.mainContent}>
             <View style={styles.mainHead}>
               <Text style={styles.headText}>Events For You</Text>
-              <Text>Sort</Text>
+              <FontAwesome name="sliders" size={25} colot="#4c3f91" />
             </View>
-            <View>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('DetailEvent')}>
-                <View style={styles.relative}>
+            <ScrollView horizontal={true} style={styles.eventContain}>
+              {events.map(item => {
+                return (
+                  <EventContent
+                    key={`event-${item?.id}`}
+                    dates={item?.date}
+                    title={item?.title}
+                    eventImage={item?.picture}
+                    eventId={item?.id}
+                  />
+                );
+              })}
+            </ScrollView>
+            {/* <View style={styles.eventContain}>
+              <View>
+                <TouchableOpacity
+                  style={styles.relative}
+                  onPress={() => navigation.navigate('DetailEvent')}>
                   <Image source={galery} style={styles.galeryImg} />
                   <View style={styles.eventText}>
                     <Text style={styles.eventDate}>Wed, 15 Nov, 4:00 PM</Text>
@@ -75,9 +107,9 @@ const Home = () => {
                       Sights & Sounds Exhibition
                     </Text>
                   </View>
-                </View>
-              </TouchableOpacity>
-            </View>
+                </TouchableOpacity>
+              </View>
+            </View> */}
           </View>
         </View>
       </View>
@@ -130,15 +162,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#222B45',
   },
   dateBorder: {
+    justifyContent: 'center',
     height: 50,
-    borderWidth: 1,
-    borderColor: 'orange',
-    borderRadius: 10,
+    marginHorizontal: 20,
   },
   flex1: {
     flex: 1,
   },
   flexRow: {
+    flexDirection: 'row',
+  },
+  rowGap40: {
     flexDirection: 'row',
     gap: 40,
   },
@@ -164,6 +198,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 30,
     letterSpacing: 1,
+  },
+  eventContain: {
+    flexDirection: 'row',
+    gap: 10,
   },
   galeryImg: {
     width: '50%',
@@ -192,6 +230,16 @@ const styles = StyleSheet.create({
   dataEvent: {
     flexDirection: 'row',
     gap: 10,
+  },
+  orangeBorder: {
+    justifyContent: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'orange',
+    borderRadius: 10,
+  },
+  pv10: {
+    paddingVertical: 10,
   },
 });
 
