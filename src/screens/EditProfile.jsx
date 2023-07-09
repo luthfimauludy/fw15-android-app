@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import React from 'react';
 import Input from '../components/Input';
@@ -12,13 +13,17 @@ import {RadioButton} from 'react-native-paper';
 import Button from '../components/Button';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Formik} from 'formik';
+import {useSelector} from 'react-redux';
+import http from '../helpers/http';
+import Feather from 'react-native-vector-icons/Feather';
+import moment from 'moment';
 
 const picture = require('../assets/img/default-picture.jpg');
 
 const EditProfile = () => {
   const [editFullName, setEditFullName] = React.useState(false);
   const [editEmail, setEditEmail] = React.useState(false);
-  const [editGender, setEditGender] = React.useState('');
+  const [gender, setGender] = React.useState('0');
   const [editPhoneNumber, setEditPhoneNumber] = React.useState(false);
   const [editProfession, setEditProfession] = React.useState(false);
   const [editNasionality, setEditNasionality] = React.useState(false);
@@ -27,6 +32,10 @@ const EditProfile = () => {
   const [openSelect, setOpenSelect] = React.useState(false);
   const [professionValue, setProfessionValue] = React.useState(null);
   const [nasionalityValue, setNasionalityValue] = React.useState(null);
+  const token = useSelector(state => state.auth.token);
+  const [picture, setPicture] = React.useState(null);
+  const [profile, setProfile] = React.useState({});
+  const [successMessage, setSuccessMessage] = React.useState('');
   const [profession, setProfession] = React.useState([
     {label: 'Web Developer', value: 'webdeveloper'},
     {label: 'Architect', value: 'architect'},
@@ -40,22 +49,76 @@ const EditProfile = () => {
     {label: 'Singapore', value: 'singapore'},
   ]);
 
+  React.useEffect(() => {
+    async function getProfileUser() {
+      try {
+        const {data} = await http(token).get('/profile');
+        setProfile(data.results);
+        console(data.results);
+      } catch (error) {
+        const message = error?.response?.data?.message;
+        if (message) {
+          console.log(message);
+        }
+      }
+    }
+    getProfileUser();
+  }, [token]);
+
   const handleRadioPress = value => {
-    setEditGender(value);
+    setGender(value);
   };
 
-  const doEditProfile = async () => {
-    console.log('Brodi');
-    // const form = new FormData();
-    // const {data} = await http(token).patch('/profile', form, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    // });
-    // setProfile(data.results);
-    // setEditEmail(false);
-    // setEditPhoneNumber(false);
-    // setEditBirthDate(false);
+  const doEditProfile = async values => {
+    console.log(
+      values.fullName,
+      values.email,
+      values.phoneNumber,
+      professionValue,
+      nasionalityValue,
+      picture,
+    );
+    try {
+      const form = new FormData();
+      Object.keys(values).forEach(key => {
+        if (values[key]) {
+          if (key === 'birthDate') {
+            form.append(key, moment(values[key]).format('YYYY/MM/DD'));
+          } else {
+            form.append(key, values[key]);
+          }
+        }
+      });
+      form.append('fullName', values.fullName);
+      form.append('email', values.email);
+      form.append('phoneNumber', values.phoneNumber);
+      form.append('profession', professionValue);
+      form.append('nasionality', nasionalityValue);
+
+      if (picture) {
+        form.append('picture', {
+          name: picture.fileName,
+          type: picture.type,
+          uri:
+            Platform.OS === 'android'
+              ? picture.uri.replace('file://', ' ')
+              : picture.uri,
+        });
+      }
+
+      if (token) {
+        const {data} = await http(token).post('/profile', form, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        setSuccessMessage(data.message);
+        console.log(data);
+      }
+    } catch (err) {
+      const message = err?.response?.data?.message;
+      console.log(message);
+    }
   };
 
   return (
@@ -73,15 +136,20 @@ const EditProfile = () => {
             fullName: '',
             email: '',
             phoneNumber: '',
-            gender: '',
-            profession: '',
-            nasionality: '',
+            gender: profile?.gender ? '1' : '0',
             birthDate: '',
           }}
-          onSubmit={doEditProfile}>
+          onSubmit={doEditProfile}
+          enableReinitialize>
           {({handleBlur, handleChange, handleSubmit, values}) => (
             <>
               <View style={style.nameCont}>
+                {successMessage && (
+                  <View>
+                    <Feather name="check" size={25} />
+                    <Text>{successMessage}</Text>
+                  </View>
+                )}
                 <Text style={style.title}>Full Name</Text>
                 <View style={style.flexCont}>
                   {editFullName && (
@@ -92,7 +160,15 @@ const EditProfile = () => {
                     />
                   )}
                   <View style={style.directionRow}>
-                    {!editFullName && <Text>Luthfi Putra Mauludy</Text>}
+                    {!editFullName && (
+                      <>
+                        {profile.fullName ? (
+                          <Text>{profile?.fullName}</Text>
+                        ) : (
+                          <Text style={style.textRed}>Not Set</Text>
+                        )}
+                      </>
+                    )}
                     {!editFullName && (
                       <TouchableOpacity onPress={() => setEditFullName(true)}>
                         <Text style={style.textEdit}>Edit</Text>
@@ -112,7 +188,15 @@ const EditProfile = () => {
                     />
                   )}
                   <View style={style.directionRow}>
-                    {!editEmail && <Text>luthfi@mail.com</Text>}
+                    {!editEmail && (
+                      <>
+                        {profile.email ? (
+                          <Text>{profile?.email}</Text>
+                        ) : (
+                          <Text style={style.textRed}>Not Set</Text>
+                        )}
+                      </>
+                    )}
                     {!editEmail && (
                       <TouchableOpacity onPress={() => setEditEmail(true)}>
                         <Text style={style.textEdit}>Edit</Text>
@@ -133,7 +217,15 @@ const EditProfile = () => {
                     />
                   )}
                   <View style={style.directionRow}>
-                    {!editPhoneNumber && <Text>081234567890</Text>}
+                    {!editPhoneNumber && (
+                      <>
+                        {profile.phoneNumber ? (
+                          <Text>{profile?.phoneNumber}</Text>
+                        ) : (
+                          <Text style={style.textRed}>Not Set</Text>
+                        )}
+                      </>
+                    )}
                     {!editPhoneNumber && (
                       <TouchableOpacity
                         onPress={() => setEditPhoneNumber(true)}>
@@ -147,14 +239,14 @@ const EditProfile = () => {
                 <Text style={style.title}>Gender</Text>
                 <RadioButton.Group
                   onValueChange={handleRadioPress}
-                  value={editGender}>
+                  value={gender}>
                   <View style={style.directionRow}>
                     <View style={style.flexContGender}>
-                      <RadioButton.Android value="male" />
+                      <RadioButton.Android name="gender" value="0" />
                       <Text>Male</Text>
                     </View>
                     <View style={style.flexContGender}>
-                      <RadioButton.Android value="female" />
+                      <RadioButton.Android name="gender" value="1" />
                       <Text>Female</Text>
                     </View>
                   </View>
@@ -162,27 +254,70 @@ const EditProfile = () => {
               </View>
               <View style={style.nameCont}>
                 <Text style={style.title}>Profession</Text>
-                <DropDownPicker
-                  open={open}
-                  value={professionValue}
-                  items={profession}
-                  setOpen={setOpen}
-                  setValue={setProfessionValue}
-                  setItems={setProfession}
-                  zIndex={1001}
-                />
+                <View style={style.flexCont}>
+                  {editProfession && (
+                    <DropDownPicker
+                      placeholder="Select Profession"
+                      open={open}
+                      value={professionValue}
+                      items={profession}
+                      setOpen={setOpen}
+                      setValue={setProfessionValue}
+                      setItems={setProfession}
+                      zIndex={1001}
+                    />
+                  )}
+                  <View style={style.directionRow}>
+                    {!editProfession && (
+                      <>
+                        {profile.profession ? (
+                          <Text>{profile?.profession}</Text>
+                        ) : (
+                          <Text style={style.textRed}>Not Set</Text>
+                        )}
+                      </>
+                    )}
+                    {!editProfession && (
+                      <TouchableOpacity onPress={() => setEditProfession(true)}>
+                        <Text style={style.textEdit}>Edit</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </View>
               </View>
               <View style={style.nameCont}>
                 <Text style={style.title}>Nationality</Text>
-                <DropDownPicker
-                  open={openSelect}
-                  value={nasionalityValue}
-                  items={nasionality}
-                  setOpen={setOpenSelect}
-                  setValue={setNasionalityValue}
-                  setItems={setNasionality}
-                  zIndex={1000}
-                />
+                <View style={style.flexCont}>
+                  {editNasionality && (
+                    <DropDownPicker
+                      placeholder="Select Nasionality"
+                      open={openSelect}
+                      value={nasionalityValue}
+                      items={nasionality}
+                      setOpen={setOpenSelect}
+                      setValue={setNasionalityValue}
+                      setItems={setNasionality}
+                      zIndex={1000}
+                    />
+                  )}
+                  <View style={style.directionRow}>
+                    {!editNasionality && (
+                      <>
+                        {profile.nasionality ? (
+                          <Text>{profile?.nasionality}</Text>
+                        ) : (
+                          <Text style={style.textRed}>Not Set</Text>
+                        )}
+                      </>
+                    )}
+                    {!editNasionality && (
+                      <TouchableOpacity
+                        onPress={() => setEditNasionality(true)}>
+                        <Text style={style.textEdit}>Edit</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </View>
               </View>
               <View style={style.nameCont}>
                 <Text style={style.title}>Birthday Date</Text>
@@ -195,7 +330,17 @@ const EditProfile = () => {
                     />
                   )}
                   <View style={style.directionRow}>
-                    {!editBirthDate && <Text>31/07/2000</Text>}
+                    {!editBirthDate && (
+                      <>
+                        {profile.birthDate ? (
+                          <Text>
+                            {moment(profile?.birthDate).format('YYYY/MM/DD')}
+                          </Text>
+                        ) : (
+                          <Text style={style.textRed}>Not Set</Text>
+                        )}
+                      </>
+                    )}
                     {!editBirthDate && (
                       <TouchableOpacity onPress={() => setEditBirthDate(true)}>
                         <Text style={style.textEdit}>Edit</Text>
@@ -293,6 +438,9 @@ const style = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'black',
+  },
+  textRed: {
+    color: 'red',
   },
 });
 
