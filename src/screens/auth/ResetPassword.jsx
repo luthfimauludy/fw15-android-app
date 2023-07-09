@@ -17,7 +17,7 @@ const validationSchema = Yup.object({
   password: Yup.string().required('Password cannot be empty'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Password must match')
-    .required('Password cannot be empty'),
+    .required('Confirm password cannot be empty'),
 });
 
 const ResetPassword = () => {
