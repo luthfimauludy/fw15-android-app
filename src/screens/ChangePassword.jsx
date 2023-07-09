@@ -1,9 +1,15 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import React from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import {useSelector} from 'react-redux';
-// import Feather from 'react-native-vector-icons/Feather';
+import Feather from 'react-native-vector-icons/Feather';
 import * as Yup from 'yup';
 import http from '../helpers/http';
 import {Formik} from 'formik';
@@ -24,20 +30,19 @@ const ChangePassword = ({navigation}) => {
   const [successMessage, setSuccessMessage] = React.useState('');
 
   const doChangePassword = async values => {
+    const {oldPassword, newPassword, confirmPassword} = values;
+    const form = new URLSearchParams({
+      oldPassword,
+      newPassword,
+      confirmPassword,
+    }).toString();
     try {
-      const form = new URLSearchParams().toString();
-      form.append('oldPassword', values.oldPassword);
-      form.append('newPassword', values.newPassword);
-      form.append('confirmPassword', values.confirmPassword);
       const {data} = await http(token).patch('/change-password', form);
       console.log(data);
-      if (data?.message.includes('success')) {
+      if (data?.message) {
         setSuccessMessage(data?.message);
         setTimeout(() => navigation.navigate('Profile'), 2000);
       }
-      // if (data.results.errors) {
-      //   setErrorMessage(data.results.errors[0].msg);
-      // }
     } catch (err) {
       const message = err?.response?.data?.message;
       if (message) {
@@ -53,13 +58,13 @@ const ChangePassword = ({navigation}) => {
     setTimeout(() => setErrorMessage(''), 3000);
   }
 
-  // const handlePressEvent = () => {
-  //   navigation.navigate('Profile');
-  // };
+  const handlePressEvent = () => {
+    navigation.navigate('Profile');
+  };
 
   return (
-    <View style={styles.wrapper}>
-      {/* <StatusBar translucent={true} backgroundColor="transparent" />
+    <ScrollView style={styles.wrapper}>
+      {/* <StatusBar translucent={true} backgroundColor="transparent" /> */}
       <View style={globalStyles.sectionHeader}>
         <View style={globalStyles.backArrow}>
           <TouchableOpacity onPress={handlePressEvent}>
@@ -69,7 +74,7 @@ const ChangePassword = ({navigation}) => {
         <View>
           <Text style={globalStyles.textHeader}>Change Password</Text>
         </View>
-      </View> */}
+      </View>
       <Formik
         initialValues={{
           oldPassword: '',
@@ -152,7 +157,7 @@ const ChangePassword = ({navigation}) => {
           </View>
         )}
       </Formik>
-    </View>
+    </ScrollView>
   );
 };
 
