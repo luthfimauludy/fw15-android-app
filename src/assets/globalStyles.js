@@ -55,11 +55,9 @@ const globalStyles = StyleSheet.create({
   },
   sectionHeader: {
     flexDirection: 'row',
-    paddingHorizontal: 10,
-    paddingTop: 30,
     paddingBottom: 50,
+    gap: 30,
   },
-  backArrow: {flex: 1},
   textHeader: {
     fontSize: 20,
     letterSpacing: 1,
