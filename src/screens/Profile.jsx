@@ -10,11 +10,32 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import {useSelector} from 'react-redux';
+import http from '../helpers/http';
 
 const card = require('../assets/img/card.png');
 const picture = require('../assets/img/default-picture.jpg');
 const Profile = () => {
+  const token = useSelector(state => state.auth.token);
+  const [profile, setProfile] = React.useState({});
   const navigation = useNavigation();
+
+  React.useEffect(() => {
+    async function getProfileUser() {
+      try {
+        const {data} = await http(token).get('/profile');
+        setProfile(data.results);
+        console(data.results);
+      } catch (error) {
+        const message = error?.response?.data?.message;
+        if (message) {
+          console.log(message);
+        }
+      }
+    }
+    getProfileUser();
+  }, [token]);
+
   return (
     <ScrollView style={style.container}>
       <View style={style.contProfile}>
@@ -25,8 +46,10 @@ const Profile = () => {
             </View>
           </View>
           <View style={style.contProfileName}>
-            <Text style={style.name}>Luthfi Putra M.</Text>
-            <Text style={style.profession}>Developers, ID</Text>
+            <Text style={style.name}>{profile?.fullName}</Text>
+            <Text style={style.profession}>
+              {profile?.profession}, {profile?.nasionality}
+            </Text>
           </View>
         </View>
         <View style={style.cardOne}>
