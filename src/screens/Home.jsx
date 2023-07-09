@@ -4,7 +4,6 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Image,
   ScrollView,
 } from 'react-native';
 import React, {useCallback} from 'react';
@@ -14,6 +13,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import EventContent from '../components/EventContent';
 import http from '../helpers/http';
 import {useSelector} from 'react-redux';
+import CategoryContent from '../components/CategoryContent';
+import DateContent from '../components/DateContent';
 
 // const galery = require('../assets/img/galery.jpg');
 const Home = () => {
@@ -22,6 +23,7 @@ const Home = () => {
   const [text, onChangeText] = React.useState('');
   const deviceToken = useSelector(state => state.deviceToken.data);
   const token = useSelector(state => state.auth.token);
+
   const saveToken = useCallback(async () => {
     const form = new URLSearchParams({token: deviceToken.token}).toString();
     await http(token).post('/device-token', form);
@@ -38,6 +40,8 @@ const Home = () => {
     }
     getEvent();
   }, []);
+
+  const uniqueDates = [...new Set(events.map(item => item?.date))];
 
   return (
     <ScrollView style={styles.wrapper}>
@@ -106,6 +110,44 @@ const Home = () => {
                 );
               })}
             </ScrollView>
+            <View>
+              <Text style={styles.containerText}>Discover</Text>
+            </View>
+            <CategoryContent />
+            <View style={styles.containerUpcoming}>
+              <Text style={styles.containerTextUpcoming}>Upcoming</Text>
+              <Text>See all</Text>
+            </View>
+            <View style={styles.monthTextCont}>
+              <Text style={styles.monthText}>OCT</Text>
+            </View>
+            <View>
+              {uniqueDates.map(date => {
+                const itemsByDate = events.filter(item => item?.date === date);
+                const item = itemsByDate[0];
+                return (
+                  <View
+                    key={`event-by-date-${item?.id}`}
+                    style={styles.upcomingBox}>
+                    <DateContent dates={item?.date} days={item?.date} />
+                    <View style={styles.contentUpcoming}>
+                      <EventContent
+                        key={`event-${item?.id}`}
+                        dates={item?.date}
+                        title={item?.title}
+                        eventImage={item?.picture}
+                        eventId={item?.id}
+                      />
+                      <TouchableOpacity style={styles.buttonUpcoming}>
+                        <Text style={styles.textButton}>
+                          Show All {itemsByDate.length} Events
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
           </View>
         </View>
       </View>
@@ -236,6 +278,55 @@ const styles = StyleSheet.create({
   },
   pv10: {
     paddingVertical: 10,
+  },
+  containerText: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: 'black',
+    padding: 10,
+  },
+  containerTextUpcoming: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  containerUpcoming: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  upcomingBox: {
+    flexDirection: 'row',
+  },
+  monthText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FF3D72',
+  },
+  monthTextCont: {
+    paddingHorizontal: 10,
+  },
+  buttonUpcoming: {
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: 'blue',
+    borderRadius: 10,
+    marginTop: 20,
+    marginBottom: 50,
+    width: '80%',
+    height: 50,
+    borderTopColor: '#FF8900',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textButton: {
+    color: 'blue',
+    fontWeight: 'bold',
+  },
+  contentUpcoming: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
