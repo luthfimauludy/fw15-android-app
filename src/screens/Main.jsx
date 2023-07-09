@@ -63,11 +63,7 @@ function MyDrawer() {
       <Drawer.Screen
         name="SplashScreen"
         component={SplashScreen}
-        options={
-          ({drawerLabel: () => null},
-          {drawerItemStyle: {height: 0}},
-          {headerShown: false})
-        }
+        options={({drawerLabel: () => null}, {drawerItemStyle: {height: 0}})}
       />
       <Drawer.Screen
         name="Home"
