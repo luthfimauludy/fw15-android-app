@@ -33,14 +33,14 @@ const Home = () => {
 
   React.useEffect(() => {
     async function getEvent() {
-      const {data} = await http().get('/event?sort=date&sortBy=asc');
+      const {data} = await http().get('/events?sort=date&sortBy=asc&limit=10');
       setEvent(data.results);
     }
     getEvent();
   }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <ScrollView style={styles.wrapper}>
       <View style={styles.nav}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Feather name="menu" size={25} color="#FFF" />
@@ -106,25 +106,10 @@ const Home = () => {
                 );
               })}
             </ScrollView>
-            {/* <View style={styles.eventContain}>
-              <View>
-                <TouchableOpacity
-                  style={styles.relative}
-                  onPress={() => navigation.navigate('DetailEvent')}>
-                  <Image source={galery} style={styles.galeryImg} />
-                  <View style={styles.eventText}>
-                    <Text style={styles.eventDate}>Wed, 15 Nov, 4:00 PM</Text>
-                    <Text style={styles.eventTitle}>
-                      Sights & Sounds Exhibition
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View> */}
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
