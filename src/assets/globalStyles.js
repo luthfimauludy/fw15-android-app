@@ -53,6 +53,17 @@ const globalStyles = StyleSheet.create({
     fontSize: 12,
     paddingLeft: 10,
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    paddingTop: 30,
+    paddingBottom: 50,
+  },
+  backArrow: {flex: 1},
+  textHeader: {
+    fontSize: 20,
+    letterSpacing: 1,
+  },
 });
 
 export default globalStyles;
