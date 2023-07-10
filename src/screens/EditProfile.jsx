@@ -18,10 +18,11 @@ import moment from 'moment';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ImageTemplate from '../components/ImageTemplate';
 import {defaultPic} from '../assets';
+import globalStyles from '../assets/globalStyles';
 
 // const defaultPic = require('../assets/img/default-picture.jpg');
 
-const EditProfile = () => {
+const EditProfile = ({navigation}) => {
   const token = useSelector(state => state.auth.token);
   const [editFullName, setEditFullName] = React.useState(false);
   const [editEmail, setEditEmail] = React.useState(false);
@@ -128,6 +129,10 @@ const EditProfile = () => {
     }
   }, []);
 
+  const handlePressEvent = () => {
+    navigation.navigate('Profile');
+  };
+
   // try {
   //   const form = new FormData();
   //   Object.keys(values).forEach(key => {
@@ -163,6 +168,16 @@ const EditProfile = () => {
   return (
     <ScrollView style={style.container}>
       <View style={style.contEditProf}>
+        <View style={globalStyles.sectionHeader}>
+          <View style={globalStyles.backArrow}>
+            <TouchableOpacity onPress={handlePressEvent}>
+              <Feather name="arrow-left" size={25} />
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Text style={globalStyles.textHeader}>Edit Profile</Text>
+          </View>
+        </View>
         <Formik
           initialValues={{
             fullName: profile?.fullName,
@@ -427,8 +442,6 @@ const style = StyleSheet.create({
   },
   contEditProf: {
     backgroundColor: 'white',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
     padding: 30,
     gap: 20,
   },
@@ -468,7 +481,6 @@ const style = StyleSheet.create({
   profileWrapper: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
     gap: 10,
   },
   photosContent: {
