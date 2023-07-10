@@ -101,6 +101,7 @@ const EditProfile = ({navigation}) => {
     setEditEmail(false);
     setEditPhoneNumber(false);
     setGender(false);
+    setEditBirthDate(false);
     getProfile();
     setFileResponse([]);
   };
@@ -186,7 +187,9 @@ const EditProfile = ({navigation}) => {
             gender: profile?.gender ? '1' : '0',
             profession: profile?.profession,
             nasionality: profile?.nasionality,
-            birthDate: profile?.birthDate,
+            birthDate:
+              profile?.birthDate &&
+              moment(profile.birthDate).format('YYYY/MM/DD'),
           }}
           onSubmit={doEditProfile}
           enableReinitialize>
