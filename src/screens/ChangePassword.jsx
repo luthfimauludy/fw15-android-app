@@ -64,7 +64,6 @@ const ChangePassword = ({navigation}) => {
 
   return (
     <ScrollView style={styles.wrapper}>
-      {/* <StatusBar translucent={true} backgroundColor="transparent" /> */}
       <View style={globalStyles.sectionHeader}>
         <View style={globalStyles.backArrow}>
           <TouchableOpacity onPress={handlePressEvent}>
