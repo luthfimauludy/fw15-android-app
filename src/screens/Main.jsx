@@ -73,6 +73,7 @@ function MyDrawer() {
             <FontAwesome5Icon name="home" color={color} size={size} />
           ),
           drawerLabel: 'Home',
+          headerShown: false,
         }}
       />
       <Drawer.Screen
@@ -100,7 +101,7 @@ function MyDrawer() {
         }}
       />
       <Drawer.Screen
-        name="MyWislist"
+        name="MyWishlist"
         component={MyWishlist}
         options={{
           drawerIcon: ({color, size}) => (
@@ -115,6 +116,7 @@ function MyDrawer() {
         options={{
           drawerItemStyle: {display: 'none'},
           drawerLabel: 'DetailEvent',
+          headerShown: false,
         }}
       />
       <Drawer.Screen
@@ -139,6 +141,7 @@ function MyDrawer() {
         options={{
           drawerItemStyle: {display: 'none'},
           drawerLabel: 'EditProfile',
+          headerShown: false,
         }}
       />
       <Drawer.Screen
@@ -147,6 +150,7 @@ function MyDrawer() {
         options={{
           drawerItemStyle: {display: 'none'},
           drawerLabel: 'ChangePassword',
+          headerShown: false,
         }}
       />
       <Drawer.Screen
