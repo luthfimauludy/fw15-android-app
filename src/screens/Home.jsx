@@ -119,7 +119,7 @@ const Home = () => {
               <Text>See all</Text>
             </View>
             <View style={styles.monthTextCont}>
-              <Text style={styles.monthText}>OCT</Text>
+              <Text style={styles.monthText}>APR</Text>
             </View>
             <View>
               {uniqueDates.map(date => {
