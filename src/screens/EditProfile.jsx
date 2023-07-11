@@ -38,17 +38,22 @@ const EditProfile = ({navigation}) => {
   const [profile, setProfile] = React.useState({});
   const [fileResponse, setFileResponse] = React.useState([]);
   const [profession, setProfession] = React.useState([
-    {label: 'Web Developer', value: 'webdeveloper'},
-    {label: 'Architect', value: 'architect'},
-    {label: 'Accountant', value: 'accountant'},
-    {label: 'Chef', value: 'chef'},
+    {label: 'Web Developer', value: 'Web Developer'},
+    {label: 'Architect', value: 'Architect'},
+    {label: 'Accountant', value: 'Accountant'},
+    {label: 'Chef', value: 'Chef'},
   ]);
   const [nasionality, setNasionality] = React.useState([
-    {label: 'Indonesia', value: 'indonesia'},
-    {label: 'USA', value: 'usa'},
-    {label: 'UK', value: 'uk'},
-    {label: 'Singapore', value: 'singapore'},
+    {label: 'Indonesia', value: 'Indonesia'},
+    {label: 'USA', value: 'USA'},
+    {label: 'UK', value: 'UK'},
+    {label: 'Singapore', value: 'Singapore'},
   ]);
+
+  // const changeNasionality = (value, handleChange) => {
+  //   handleChange(value);
+  //   setNasionalityValue(value);
+  // };
 
   React.useEffect(() => {
     const getProfile = async () => {
@@ -101,6 +106,8 @@ const EditProfile = ({navigation}) => {
     setEditEmail(false);
     setEditPhoneNumber(false);
     setGender(false);
+    setEditProfession(false);
+    setEditNasionality(false);
     setEditBirthDate(false);
     getProfile();
     setFileResponse([]);
@@ -133,38 +140,6 @@ const EditProfile = ({navigation}) => {
   const handlePressEvent = () => {
     navigation.navigate('Profile');
   };
-
-  // try {
-  //   const form = new FormData();
-  //   Object.keys(values).forEach(key => {
-  //     if (values[key]) {
-  //       if (key === 'birthDate') {
-  //         form.append(key, moment(values[key]).format('YYYY/MM/DD'));
-  //       } else {
-  //         form.append(key, values[key]);
-  //       }
-  //     }
-  //   });
-  //   form.append('fullName', values.fullName);
-  //   form.append('email', values.email);
-  //   form.append('phoneNumber', values.phoneNumber);
-  //   form.append('profession', professionValue);
-  //   form.append('nasionality', nasionalityValue);
-
-  //   if (token) {
-  //     const {data} = await http(token).patch('/profile', form, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-  //     setProfile(data.results);
-  //     setSuccessMessage(data.message);
-  //     console.log(data);
-  //   }
-  // } catch (err) {
-  //   const message = err?.response?.data?.message;
-  //   console.log(message);
-  // }
 
   return (
     <ScrollView style={style.container}>
@@ -332,8 +307,10 @@ const EditProfile = ({navigation}) => {
                       items={profession}
                       setOpen={setOpen}
                       setValue={setProfessionValue}
+                      onChangeValue={handleChange('profession')}
                       setItems={setProfession}
                       zIndex={1001}
+                      listMode="SCROLLVIEW"
                     />
                   )}
                   <View style={style.directionRow}>
@@ -365,8 +342,10 @@ const EditProfile = ({navigation}) => {
                       items={nasionality}
                       setOpen={setOpenSelect}
                       setValue={setNasionalityValue}
+                      onChangeValue={handleChange('nasionality')}
                       setItems={setNasionality}
                       zIndex={1000}
+                      listMode="SCROLLVIEW"
                     />
                   )}
                   <View style={style.directionRow}>
