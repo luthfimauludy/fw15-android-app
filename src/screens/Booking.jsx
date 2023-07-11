@@ -9,12 +9,69 @@ import {
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Button from '../components/Button';
-import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import http from '../helpers/http';
 
 const booking = require('../assets/img/Booking.png');
 const swap = require('../assets/img/swap.png');
-const Booking = () => {
-  const navigation = useNavigation();
+const Booking = ({route, navigation}) => {
+  const {id: eventId} = route.params;
+  const [sections, setSections] = React.useState([]);
+  const [filledSection, setFilledSection] = React.useState({
+    id: 0,
+    quantity: 0,
+  });
+  const token = useSelector(state => state.auth.token);
+
+  const increment = id => {
+    if (filledSection.quantity < 5) {
+      setFilledSection({
+        id,
+        quantity: filledSection.quantity + 1,
+      });
+    }
+  };
+
+  const decrement = id => {
+    if (filledSection.quantity > 0) {
+      setFilledSection({
+        id,
+        quantity: filledSection.quantity - 1,
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    const getSections = async () => {
+      const {data} = await http(token).get('/sections');
+      setSections(data.results);
+    };
+    getSections();
+  }, [token]);
+
+  const doReservation = async () => {
+    const form = new URLSearchParams({
+      eventId,
+      sectionId: filledSection.id,
+      quantity: filledSection.quantity,
+    }).toString();
+    const {data} = await http(token).post('/reservations', form);
+
+    navigation.navigate('Payment', {
+      state: {
+        eventId,
+        eventName: data.results.events.title,
+        reservationId: data.results.id,
+        sectionName: data.results.sectionName,
+        quantity: data.results.quantity,
+        totalPayment: data.results.totalPayment,
+      },
+    });
+  };
+
+  const selectedSection =
+    filledSection && sections.filter(item => item.id === filledSection.id)[0];
+
   return (
     <ScrollView style={styles.wrapper}>
       <View style={styles.bookingImg}>
@@ -31,92 +88,61 @@ const Booking = () => {
           </View>
         </View>
         <View style={styles.paddingTop30}>
-          <View>
-            <View style={styles.gap20}>
-              <Icon name="ticket" size={30} />
-              <View style={styles.sectionTicket}>
-                <View>
-                  <Text style={styles.text14}>SECTION REG, ROW 1</Text>
-                  <Text style={styles.text12}>12 Seats available</Text>
+          {sections.map(item => {
+            return (
+              <View key={`section-${item?.id}`}>
+                <View style={styles.gap20}>
+                  <Icon name="ticket" size={30} color="#61764b" />
+                  <View style={styles.sectionTicket}>
+                    <View>
+                      <Text style={styles.text14}>
+                        SECTION {item?.name}, ROW 1
+                      </Text>
+                      <Text style={styles.text12}>12 Seats available</Text>
+                    </View>
+                    <View style={styles.alignCenter}>
+                      <Text style={styles.text14}>IDR {item?.price}</Text>
+                      <Text style={styles.text12}>per person</Text>
+                    </View>
+                  </View>
                 </View>
-                <View style={styles.alignCenter}>
-                  <Text style={styles.text14}>$15</Text>
-                  <Text style={styles.text12}>per person</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.quantityText}>
-              <Text style={styles.text14}>Quantity</Text>
-              <View>
-                <View style={styles.buttonQty}>
-                  <Icon name="minus-square-o" size={30} />
-                  <Text style={styles.text14}>0</Text>
-                  <Icon name="plus-square-o" size={30} />
-                </View>
-              </View>
-            </View>
-          </View>
-          <View>
-            <View style={styles.gap20}>
-              <Icon name="ticket" size={30} />
-              <View style={styles.sectionTicket}>
-                <View>
-                  <Text style={styles.text14}>SECTION VIP, ROW 2</Text>
-                  <Text style={styles.text12}>9 Seats available</Text>
-                </View>
-                <View style={styles.alignCenter}>
-                  <Text style={styles.text14}>$35</Text>
-                  <Text style={styles.text12}>per person</Text>
+                <View style={styles.quantityText}>
+                  <Text style={styles.text14}>Quantity</Text>
+                  <View style={styles.buttonQty}>
+                    <TouchableOpacity onPress={() => decrement(item?.id)}>
+                      <Icon name="minus-square-o" size={30} />
+                    </TouchableOpacity>
+                    <Text style={styles.text14}>
+                      {item?.id === filledSection.id
+                        ? filledSection.quantity
+                        : 0}
+                    </Text>
+                    <TouchableOpacity onPress={() => increment(item?.id)}>
+                      <Icon name="plus-square-o" size={30} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-            <View style={styles.quantityText}>
-              <Text style={styles.text14}>Quantity</Text>
-              <View>
-                <View style={styles.buttonQty}>
-                  <Icon name="minus-square-o" size={30} />
-                  <Text style={styles.text14}>2</Text>
-                  <Icon name="plus-square-o" size={30} />
-                </View>
-              </View>
-            </View>
-          </View>
-          <View>
-            <View style={styles.gap20}>
-              <Icon name="ticket" size={30} />
-              <View style={styles.sectionTicket}>
-                <View>
-                  <Text style={styles.text14}>SECTION VVIP, ROW 3</Text>
-                  <Text style={styles.text12}>6 Seats available</Text>
-                </View>
-                <View style={styles.alignCenter}>
-                  <Text style={styles.text14}>$50</Text>
-                  <Text style={styles.text12}>per person</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.quantityText}>
-              <Text style={styles.text14}>Quantity</Text>
-              <View>
-                <View style={styles.buttonQty}>
-                  <Icon name="minus-square-o" size={30} />
-                  <Text style={styles.text14}>0</Text>
-                  <Icon name="plus-square-o" size={30} />
-                </View>
-              </View>
-            </View>
-          </View>
+            );
+          })}
         </View>
         <View style={styles.checkoutContent}>
-          <View style={styles.alignCenter}>
-            <Text style={styles.textBlack}>VIP 2 $70</Text>
+          <View style={styles.directionColumn}>
+            <View style={styles.directionRow}>
+              <Text style={styles.textBlack}>
+                {selectedSection?.name || '-'}
+              </Text>
+              <Text style={styles.textBlack}>{filledSection?.quantity}</Text>
+              <Text style={styles.textBlack}>
+                IDR {selectedSection?.price * filledSection?.quantity || '0'}
+              </Text>
+            </View>
             <Text style={styles.text12}>Get now on Urticket</Text>
           </View>
           <TouchableOpacity
             style={styles.btnCheckout}
             onPress={() => navigation.navigate('Payment')}>
-            <Text>Checkout</Text>
-            {/* <Button>Checkout</Button> */}
+            <Button onPress={doReservation}>Checkout</Button>
           </TouchableOpacity>
         </View>
       </View>
@@ -200,14 +226,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkoutContent: {
-    width: 'auto',
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 20,
+    paddingVertical: 20,
+    gap: 10,
   },
   btnCheckout: {
-    width: '50%',
+    width: '45%',
+  },
+  directionRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  directionColumn: {
+    alignItems: 'center',
+    flexDirection: 'column',
+    gap: 5,
   },
 });
 
