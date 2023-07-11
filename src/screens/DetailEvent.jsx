@@ -16,7 +16,6 @@ import {useSelector} from 'react-redux';
 import http from '../helpers/http';
 import moment from 'moment';
 
-const galery = require('../assets/img/galery.jpg');
 const maps = require('../assets/img/maps.png');
 const DetailEvent = ({route, navigation}) => {
   const {id} = route.params;
@@ -76,7 +75,7 @@ const DetailEvent = ({route, navigation}) => {
 
   return (
     <ScrollView style={styles.wrapper}>
-      <ImageBackground source={galery} style={styles.imgBackground}>
+      <ImageBackground src={eventDetail?.picture} style={styles.imgBackground}>
         <View style={styles.flexRow}>
           <View>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 40,
   },
   imgBackground: {
     flex: 1,
