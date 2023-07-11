@@ -8,13 +8,14 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
-import FeatherIcon from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
 import {useSelector} from 'react-redux';
 import http from '../helpers/http';
+import {defaultPic} from '../assets';
+import ImageTemplate from '../components/ImageTemplate';
 
 const card = require('../assets/img/card.png');
-const picture = require('../assets/img/default-picture.jpg');
 const Profile = () => {
   const token = useSelector(state => state.auth.token);
   const [profile, setProfile] = React.useState({});
@@ -42,7 +43,11 @@ const Profile = () => {
         <View style={style.contProfileName}>
           <View style={style.foto}>
             <View style={style.fotoIcon}>
-              <Image style={style.picture} source={picture} />
+              <ImageTemplate
+                src={profile?.picture || null}
+                defaultImg={defaultPic}
+                style={style.IMGProfiles}
+              />
             </View>
           </View>
           <View style={style.contProfileName}>
@@ -57,7 +62,7 @@ const Profile = () => {
             <Text style={style.cardText}>Card</Text>
             <View>
               <TouchableOpacity style={style.plusIcon}>
-                <FeatherIcon name="plus" size={25} color="blue" />
+                <Feather name="plus" size={25} color="#61764B" />
               </TouchableOpacity>
             </View>
           </View>
@@ -74,7 +79,7 @@ const Profile = () => {
           <View style={style.editProfile}>
             <View style={style.contTextEdit}>
               <View>
-                <AntDesignIcon name="edit" size={25} />
+                <AntDesign name="edit" size={25} />
               </View>
               <TouchableOpacity
                 onPress={() => navigation.navigate('EditProfile')}>
@@ -82,13 +87,13 @@ const Profile = () => {
               </TouchableOpacity>
             </View>
             <TouchableOpacity>
-              <FeatherIcon name="chevron-right" size={25} />
+              <Feather name="chevron-right" size={25} />
             </TouchableOpacity>
           </View>
           <View style={style.changePassword}>
             <View style={style.contTextEdit}>
               <View>
-                <FeatherIcon name="unlock" size={25} />
+                <Feather name="unlock" size={25} />
               </View>
               <TouchableOpacity
                 onPress={() => navigation.navigate('ChangePassword')}>
@@ -96,7 +101,7 @@ const Profile = () => {
               </TouchableOpacity>
             </View>
             <TouchableOpacity>
-              <FeatherIcon name="chevron-right" size={25} />
+              <Feather name="chevron-right" size={25} />
             </TouchableOpacity>
           </View>
         </View>
@@ -180,7 +185,7 @@ const style = StyleSheet.create({
     width: 45,
     height: 45,
     borderWidth: 2,
-    borderColor: 'blue',
+    borderColor: '#61764B',
     borderStyle: 'dashed',
     borderRadius: 10,
     marginLeft: 30,
@@ -212,6 +217,11 @@ const style = StyleSheet.create({
     gap: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  IMGProfiles: {
+    objectFit: 'cover',
+    width: '100%',
+    height: '100%',
   },
 });
 export default Profile;
