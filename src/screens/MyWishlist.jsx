@@ -1,46 +1,54 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
+import http from '../helpers/http';
+import moment from 'moment';
+import {useSelector} from 'react-redux';
 
 const MyWishlist = () => {
+  const [wishlists, setWishlists] = React.useState([]);
+  const token = useSelector(state => state.auth.token);
+
+  React.useEffect(() => {
+    async function getWishlists() {
+      const {data} = await http(token).get('/wishlists');
+      setWishlists(data.results);
+    }
+    getWishlists();
+  }, [token]);
+
   return (
     <View style={styles.wrapper}>
-      <View style={styles.eventContain}>
-        <View style={styles.spaceBetween}>
-          <View style={styles.eventDate}>
-            <Text style={styles.textOrange}>15</Text>
-            <Text style={styles.textDay}>Wed</Text>
+      {wishlists.map(item => {
+        return (
+          <View key={`wishlist-${item?.id}`} style={styles.eventContain}>
+            <View style={styles.spaceBetween}>
+              <View style={styles.eventDate}>
+                <Text style={styles.textOrange}>
+                  {moment(item.date).format('DD')}
+                </Text>
+                <Text style={styles.textDay}>
+                  {moment(item.date).format('ddd')}
+                </Text>
+              </View>
+              <View>
+                <Icon name="heart" size={25} color="#61764b" />
+              </View>
+            </View>
+            <View style={styles.eventDetail}>
+              <Text style={styles.eventTitle}>{item?.title}</Text>
+              <View>
+                <Text style={styles.eventSubtitle}>
+                  {item?.location}, Indonesia
+                </Text>
+                <Text style={styles.eventSubtitle}>
+                  {moment(item.date).format('LLL')}
+                </Text>
+              </View>
+            </View>
           </View>
-          <View>
-            <Icon name="heart" size={25} color="#61764b" />
-          </View>
-        </View>
-        <View style={styles.eventDetail}>
-          <Text style={styles.eventTitle}>Sights & Sounds Exhibition</Text>
-          <View>
-            <Text style={styles.eventSubtitle}>Jakarta, Indonesia</Text>
-            <Text style={styles.eventSubtitle}>Wed, 15 Nov, 4:00 PM</Text>
-          </View>
-        </View>
-      </View>
-      <View style={styles.eventContain}>
-        <View style={styles.spaceBetween}>
-          <View style={styles.eventDate}>
-            <Text style={styles.textOrange}>15</Text>
-            <Text style={styles.textDay}>Wed</Text>
-          </View>
-          <View>
-            <Icon name="heart" size={25} color="#61764b" />
-          </View>
-        </View>
-        <View style={styles.eventDetail}>
-          <Text style={styles.eventTitle}>Sights & Sounds Exhibition</Text>
-          <View>
-            <Text style={styles.eventSubtitle}>Jakarta, Indonesia</Text>
-            <Text style={styles.eventSubtitle}>Wed, 15 Nov, 4:00 PM</Text>
-          </View>
-        </View>
-      </View>
+        );
+      })}
     </View>
   );
 };
