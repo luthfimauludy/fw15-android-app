@@ -139,11 +139,9 @@ const Booking = ({route, navigation}) => {
             </View>
             <Text style={styles.text12}>Get now on Urticket</Text>
           </View>
-          <TouchableOpacity
-            style={styles.btnCheckout}
-            onPress={() => navigation.navigate('Payment')}>
+          <View style={styles.btnCheckout}>
             <Button onPress={doReservation}>Checkout</Button>
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ScrollView>
