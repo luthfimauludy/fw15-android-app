@@ -15,7 +15,7 @@ import http from '../helpers/http';
 const booking = require('../assets/img/Booking.png');
 const swap = require('../assets/img/swap.png');
 const Booking = ({route, navigation}) => {
-  const {id: eventId} = route.params;
+  const {eventId} = route.params;
   const [sections, setSections] = React.useState([]);
   const [filledSection, setFilledSection] = React.useState({
     id: 0,
@@ -56,15 +56,12 @@ const Booking = ({route, navigation}) => {
       quantity: filledSection.quantity,
     }).toString();
     const {data} = await http(token).post('/reservations', form);
+    console.log(data.results);
 
     navigation.navigate('Payment', {
-      state: {
+      dataBooking: {
         eventId,
-        eventName: data.results.events.title,
-        reservationId: data.results.id,
-        sectionName: data.results.sectionName,
-        quantity: data.results.quantity,
-        totalPayment: data.results.totalPayment,
+        reservationId: data.results.reservationId,
       },
     });
   };
