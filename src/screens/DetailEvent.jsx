@@ -130,9 +130,7 @@ const DetailEvent = ({route, navigation}) => {
               <Image source={maps} />
             </View>
             <View>
-              <Button onPress={() => handlePressEvent(eventDetail.id)}>
-                Buy Tickets
-              </Button>
+              <Button onPress={() => handlePressEvent(id)}>Buy Tickets</Button>
             </View>
           </View>
         </View>
