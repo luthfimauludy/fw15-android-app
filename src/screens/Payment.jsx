@@ -8,12 +8,27 @@ import {
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Button from '../components/Button';
-import {useNavigation} from '@react-navigation/native';
+// import Button from '../components/Button';
+import {useSelector} from 'react-redux';
+import http from '../helpers/http';
 
 const card = require('../assets/img/card.png');
-const Payment = () => {
-  const navigation = useNavigation();
+const Payment = ({navigation}) => {
+  const token = useSelector(state => state.auth.token);
+  const [selectedPayment, setSelectedPayment] = React.useState(null);
+
+  const doPayment = async e => {
+    e.preventDefault();
+    const form = new URLSearchParams({
+      // reservationId,
+      paymentMethodId: selectedPayment,
+    }).toString();
+    const {data} = await http(token).post('/payments', form);
+    if (data) {
+      navigation.replace('MyBooking');
+    }
+  };
+
   return (
     <ScrollView style={styles.wrapper}>
       <View>
