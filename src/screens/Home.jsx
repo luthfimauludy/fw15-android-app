@@ -15,6 +15,7 @@ import http from '../helpers/http';
 import {useSelector} from 'react-redux';
 import CategoryContent from '../components/CategoryContent';
 import DateContent from '../components/DateContent';
+import SplashScreen from 'react-native-splash-screen';
 
 // const galery = require('../assets/img/galery.jpg');
 const Home = () => {
@@ -42,6 +43,10 @@ const Home = () => {
   }, []);
 
   const uniqueDates = [...new Set(events.map(item => item?.date))];
+
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   return (
     <ScrollView style={styles.wrapper}>

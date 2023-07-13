@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import {clearMessage} from '../../redux/reducers/auth';
 import {useNavigation} from '@react-navigation/native';
 import Checkbox from '../../components/CheckBox';
+import SplashScreen from 'react-native-splash-screen';
 
 const validationSchema = Yup.object({
   fullName: Yup.string()
@@ -52,6 +53,10 @@ const Register = () => {
       dispatch(clearMessage());
     }, 3000);
   }
+
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   return (
     <ScrollView style={styles.wrapper}>

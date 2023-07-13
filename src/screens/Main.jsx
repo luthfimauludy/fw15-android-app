@@ -15,7 +15,7 @@ import Register from './auth/Register';
 import Login from './auth/Login';
 import ForgotPassword from './auth/ForgotPassword';
 import ResetPassword from './auth/ResetPassword';
-import SplashScreen from './SplashScreen';
+// import SplashScreen from './SplashScreen';
 import Home from './Home';
 import Profile from './Profile';
 import DetailEvent from './DetailEvent';
@@ -60,11 +60,11 @@ function MyDrawer() {
         },
       }}
       drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="SplashScreen"
         component={SplashScreen}
         options={({drawerLabel: () => null}, {drawerItemStyle: {height: 0}})}
-      />
+      /> */}
       <Drawer.Screen
         name="Home"
         component={Home}
@@ -172,11 +172,11 @@ const Main = () => {
       {!token && (
         <AuthStack.Navigator
           screenOptions={{headerShadowVisible: false, headerTitle: ''}}>
-          <Stack.Screen
+          {/* <Stack.Screen
             options={{headerShown: false}}
             name="SplashScreen"
             component={SplashScreen}
-          />
+          /> */}
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
