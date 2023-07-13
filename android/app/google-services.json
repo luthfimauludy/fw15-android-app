@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:3733832146:android:edf88873e7522be7fec80b",
+        "mobilesdk_app_id": "1:3733832146:android:e04ee81714a03c3bfec80b",
         "android_client_info": {
-          "package_name": "com.demoapps"
+          "package_name": "net.luthfi.eventix"
         }
       },
       "oauth_client": [

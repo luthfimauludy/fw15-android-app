@@ -1,4 +1,4 @@
-package com.demoapps;
+package net.luthfi.eventix;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

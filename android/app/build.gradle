@@ -74,9 +74,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.demoapps"
+    namespace "net.luthfi.eventix"
     defaultConfig {
-        applicationId "com.demoapps"
+        applicationId "net.luthfi.eventix"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
