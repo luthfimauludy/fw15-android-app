@@ -26,7 +26,7 @@ const DetailEvent = ({route, navigation}) => {
   React.useEffect(() => {
     const getEventData = async () => {
       const {data} = await http().get(`/events/${id}`);
-      setEventDetail(data.results);
+      setEventDetail(data?.results);
     };
     if (id) {
       getEventData(id);
@@ -108,9 +108,9 @@ const DetailEvent = ({route, navigation}) => {
             <View style={styles.eventInfo}>
               <Feather name="clock" size={25} color="#FC1055" />
               <Text style={styles.whiteText}>
-                {moment(eventDetail.date).format('LLLL').slice(0, 3)}
+                {moment(eventDetail?.date).format('LLLL').slice(0, 3)}
                 {', '}
-                {moment(eventDetail.date).format('LLL')}
+                {moment(eventDetail?.date).format('LLL')}
               </Text>
             </View>
             <View>
