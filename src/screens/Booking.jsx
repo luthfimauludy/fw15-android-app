@@ -59,10 +59,15 @@ const Booking = ({route, navigation}) => {
     console.log(data.results);
 
     navigation.navigate('Payment', {
-      dataBooking: {
+      state: {
         eventId,
-        reservationId: data.results.reservationId,
+        eventName: data.results.events.title,
+        reservationId: data.results.id,
+        sectionName: data.results.sectionName,
+        quantity: data.results.quantity,
+        totalPayment: data.results.totalPrice,
       },
+      replace: true,
     });
   };
 
