@@ -1,64 +1,69 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-// import Button from '../components/Button';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Button from '../components/Button';
 import {useSelector} from 'react-redux';
 import http from '../helpers/http';
+import {RadioButton} from 'react-native-paper';
 
 const card = require('../assets/img/card.png');
-const Payment = ({navigation}) => {
+const Payment = ({route, navigation}) => {
   const token = useSelector(state => state.auth.token);
-  const [selectedPayment, setSelectedPayment] = React.useState(null);
+  const {state} = route.params;
+  const [paymentMethod, setPaymentMethod] = React.useState('1');
 
-  const doPayment = async e => {
-    e.preventDefault();
+  const handleRadioPress = value => {
+    setPaymentMethod(value);
+  };
+
+  const doPayment = async () => {
+    const {reservationId} = state;
     const form = new URLSearchParams({
-      // reservationId,
-      paymentMethodId: selectedPayment,
+      reservationId,
+      paymentMethodId: paymentMethod,
     }).toString();
     const {data} = await http(token).post('/payments', form);
     if (data) {
-      navigation.replace('MyBooking');
+      navigation.navigate('MyBooking', {replace: true});
     }
   };
 
   return (
     <ScrollView style={styles.wrapper}>
-      <View>
+      <View style={styles.gap10}>
         <View>
           <Text style={styles.text20}>Payment Method</Text>
         </View>
         <View style={styles.spaceBetween}>
-          <View style={styles.paddingTop30}>
-            <View>
-              <View style={styles.gap20}>
-                <Icon name="payment" size={30} />
-                <View style={styles.flexRow}>
-                  <View>
-                    <Text style={styles.text14}>Card</Text>
+          <RadioButton.Group
+            onValueChange={handleRadioPress}
+            value={paymentMethod}>
+            <View style={styles.radioInput}>
+              <View>
+                <View style={styles.gap20}>
+                  <RadioButton.Android name="paymentMethod" value="1" />
+                  <Icon name="payment" size={30} color="#884DFF" />
+                  <View style={styles.flexRow}>
+                    <View>
+                      <Text style={styles.text14}>Card</Text>
+                    </View>
+                    <Icon name="keyboard-arrow-up" size={25} />
                   </View>
-                  <Icon name="keyboard-arrow-up" size={25} />
+                </View>
+                <View style={styles.cardContains}>
+                  <View style={styles.cardOutput}>
+                    <Image source={card} />
+                  </View>
+                  <View style={styles.plusIcon}>
+                    <Text>+</Text>
+                  </View>
                 </View>
               </View>
-              <View style={styles.cardContains}>
-                <View style={styles.cardOutput}>
-                  <Image source={card} />
-                </View>
-                <View style={styles.plusIcon}>
-                  <Text>+</Text>
-                </View>
-              </View>
-            </View>
-            <View>
               <View style={styles.gap20}>
-                <Icon name="payment" size={30} />
+                <RadioButton.Android name="paymentMethod" value="2" />
+                <FontAwesome name="bank" size={30} color="#FC1055" />
                 <View style={styles.flexRow}>
                   <View>
                     <Text style={styles.text14}>Bank Transfer</Text>
@@ -66,10 +71,9 @@ const Payment = ({navigation}) => {
                   <Icon name="keyboard-arrow-down" size={25} />
                 </View>
               </View>
-            </View>
-            <View>
               <View style={styles.gap20}>
-                <Icon name="payment" size={30} />
+                <RadioButton.Android name="paymentMethod" value="3" />
+                <Entypo name="shop" size={30} color="#FF8900" />
                 <View style={styles.flexRow}>
                   <View>
                     <Text style={styles.text14}>Retail</Text>
@@ -77,10 +81,9 @@ const Payment = ({navigation}) => {
                   <Icon name="keyboard-arrow-down" size={25} />
                 </View>
               </View>
-            </View>
-            <View>
               <View style={styles.gap20}>
-                <Icon name="payment" size={30} />
+                <RadioButton.Android name="paymentMethod" value="4" />
+                <FontAwesome name="dollar" size={30} color="#3366FF" />
                 <View style={styles.flexRow}>
                   <View>
                     <Text style={styles.text14}>E-Money</Text>
@@ -89,18 +92,15 @@ const Payment = ({navigation}) => {
                 </View>
               </View>
             </View>
-          </View>
+          </RadioButton.Group>
           <View style={styles.paymentContent}>
             <View>
               <Text style={styles.textBlack}>Total Payment</Text>
-              <Text style={styles.totalPrice}>$70</Text>
+              <Text style={styles.totalPrice}>IDR {state.totalPayment}</Text>
             </View>
-            <TouchableOpacity
-              style={styles.btnPayment}
-              onPress={() => navigation.navigate('MyBooking')}>
-              <Text>Payment</Text>
-              {/* <Button>Payment</Button> */}
-            </TouchableOpacity>
+            <View style={styles.btnPayment}>
+              <Button onPress={doPayment}>Payment</Button>
+            </View>
           </View>
         </View>
       </View>
@@ -134,13 +134,24 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   spaceBetween: {
+    flexDirection: 'column',
     justifyContent: 'space-between',
+    paddingBottom: 20,
+    gap: 70,
   },
   gap20: {
     justifyContent: 'space-between',
-    gap: 20,
+    gap: 10,
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  gap10: {
+    flexDirection: 'column',
+    gap: 10,
+  },
+  radioInput: {
+    flexDirection: 'column',
+    gap: 10,
   },
   flexRow: {
     flex: 1,
@@ -177,7 +188,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderWidth: 2,
-    borderColor: 'blue',
+    borderColor: '#61764b',
     borderStyle: 'dashed',
     borderRadius: 10,
     marginLeft: 30,
