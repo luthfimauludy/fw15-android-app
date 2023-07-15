@@ -1,19 +1,57 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
+import {useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
+import http from '../helpers/http';
+import Feather from 'react-native-vector-icons/Feather';
+import EventList from '../components/EventList';
 
 const ManageEvent = () => {
+  const [event, setEvent] = React.useState([]);
+  const token = useSelector(state => state.auth.token);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const {data} = await http(token).get('/events/manage');
+        setEvent(data.results);
+      };
+      fetchData();
+    }, [token]),
+  );
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.createContain}>
+        <Feather name="plus-circle" size={30} />
         <Text style={styles.textCreate}>Create</Text>
       </View>
       <View style={styles.eventContain}>
-        <View style={styles.eventDetail}>
-          <Text style={styles.eventTitle}>No tickets bought</Text>
-          <Text style={styles.eventSubtitle}>
-            It appears you haven’t bought any tickets yet. Maybe try searching
-            these?
-          </Text>
+        {event.length < 1 && (
+          <View style={styles.eventDetail}>
+            <Text style={styles.eventTitle}>No tickets bought</Text>
+            <Text style={styles.eventSubtitle}>
+              It appears you haven’t bought any tickets yet. Maybe try searching
+              these?
+            </Text>
+          </View>
+        )}
+        <View>
+          {event.map(item => {
+            return (
+              <EventList
+                key={`manage-event-${item?.id}`}
+                contentDate={item?.date}
+                contentDay={item?.date}
+                eventSpecId={item.eventId}
+                title={item?.title}
+                location={item?.location}
+                date={item?.date}
+                day={item?.date}
+                forManageEvent
+              />
+            );
+          })}
         </View>
       </View>
     </View>
@@ -30,7 +68,7 @@ const styles = StyleSheet.create({
   createContain: {
     width: '30%',
     flexDirection: 'row',
-    gap: 10,
+    gap: 5,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
@@ -46,7 +84,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   eventContain: {
-    height: '60%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
