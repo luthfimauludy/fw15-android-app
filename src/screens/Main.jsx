@@ -87,6 +87,16 @@ function MyDrawer() {
         }}
       />
       <Drawer.Screen
+        name="ManageEvent"
+        component={ManageEvent}
+        options={{
+          drawerIcon: ({color, size}) => (
+            <FontAwesome5Icon name="clipboard-list" color={color} size={size} />
+          ),
+          drawerLabel: 'Manage Event',
+        }}
+      />
+      <Drawer.Screen
         name="MyBooking"
         component={MyBooking}
         options={{
@@ -151,14 +161,6 @@ function MyDrawer() {
           drawerItemStyle: {display: 'none'},
           drawerLabel: 'ChangePassword',
           headerShown: false,
-        }}
-      />
-      <Drawer.Screen
-        name="ManageEvent"
-        component={ManageEvent}
-        options={{
-          drawerItemStyle: {display: 'none'},
-          drawerLabel: 'ManageEvent',
         }}
       />
     </Drawer.Navigator>
