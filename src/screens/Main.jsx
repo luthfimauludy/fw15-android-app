@@ -28,6 +28,7 @@ import MyWishlist from './MyWishlist';
 import ManageEvent from './ManageEvent';
 import CreateEvent from './CreateEvent';
 import {logout} from '../redux/reducers/auth';
+import UpdateEvent from './UpdateEvent';
 
 const AuthStack = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
@@ -170,6 +171,15 @@ function MyDrawer() {
         options={{
           drawerItemStyle: {display: 'none'},
           drawerLabel: 'CreateEvent',
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
+        name="UpdateEvent"
+        component={UpdateEvent}
+        options={{
+          drawerItemStyle: {display: 'none'},
+          drawerLabel: 'UpdateEvent',
           headerShown: false,
         }}
       />
