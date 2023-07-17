@@ -26,6 +26,7 @@ import Payment from './Payment';
 import MyBooking from './MyBooking';
 import MyWishlist from './MyWishlist';
 import ManageEvent from './ManageEvent';
+import CreateEvent from './CreateEvent';
 import {logout} from '../redux/reducers/auth';
 
 const AuthStack = createNativeStackNavigator();
@@ -160,6 +161,15 @@ function MyDrawer() {
         options={{
           drawerItemStyle: {display: 'none'},
           drawerLabel: 'ChangePassword',
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
+        name="CreateEvent"
+        component={CreateEvent}
+        options={{
+          drawerItemStyle: {display: 'none'},
+          drawerLabel: 'CreateEvent',
           headerShown: false,
         }}
       />
