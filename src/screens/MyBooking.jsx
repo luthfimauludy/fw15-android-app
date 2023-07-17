@@ -1,9 +1,30 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
-import {Link} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import http from '../helpers/http';
+import EventList from '../components/EventList';
 
-const MyBooking = () => {
+const MyBooking = ({navigation}) => {
+  const [histories, setHistories] = React.useState([]);
+  const token = useSelector(state => state.auth.token);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const {data} = await http(token).get('/history');
+        setHistories(data.results);
+      };
+      fetchData();
+    }, [token]),
+  );
+  console.log(typeof histories);
+
+  const handlePressDetail = id => {
+    navigation.navigate('DetailTransaction', {id});
+  };
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.calendarContain}>
@@ -11,34 +32,60 @@ const MyBooking = () => {
         <Text style={styles.textMonth}>March</Text>
       </View>
       <View style={styles.eventContain}>
-        <View style={styles.eventDate}>
-          <Text style={styles.textOrange}>15</Text>
-          <Text style={styles.textDay}>Wed</Text>
-        </View>
-        <View style={styles.eventDetail}>
-          <Text style={styles.eventTitle}>Sights & Sounds Exhibition</Text>
-          <View>
-            <Text style={styles.eventSubtitle}>Jakarta, Indonesia</Text>
-            <Text style={styles.eventSubtitle}>Wed, 15 Nov, 4:00 PM</Text>
+        {histories.length < 1 && (
+          <View style={styles.eventDetail}>
+            <Text style={styles.eventTitle}>No tickets bought</Text>
+            <Text style={styles.eventSubtitle}>
+              It appears you haven’t bought any tickets yet. Maybe try searching
+              these?
+            </Text>
           </View>
-          <Link to="/ManageEvent" style={styles.linkDetail}>
-            Detail
-          </Link>
-        </View>
-      </View>
-      <View style={styles.eventContain}>
-        <View style={styles.eventDate}>
-          <Text style={styles.textOrange}>15</Text>
-          <Text style={styles.textDay}>Wed</Text>
-        </View>
-        <View style={styles.eventDetail}>
-          <Text style={styles.eventTitle}>Sights & Sounds Exhibition</Text>
-          <View>
-            <Text style={styles.eventSubtitle}>Jakarta, Indonesia</Text>
-            <Text style={styles.eventSubtitle}>Wed, 15 Nov, 4:00 PM</Text>
-          </View>
-          <Text style={styles.linkDetail}>Detail</Text>
-        </View>
+        )}
+        {histories.map(item => {
+          return (
+            <EventList
+              key={`manage-booking-${item?.id}`}
+              contentDate={item?.date}
+              contentDay={item?.date}
+              title={item?.title}
+              location={item?.location}
+              date={item?.date}
+              day={item?.date}
+              forMyBooking
+              transactionDetail={() => handlePressDetail(item.id)}
+            />
+            // <View key={`manage-booking-${item.id}`}>
+            //   <View style={styles.eventDate}>
+            //     <Text style={styles.textOrange}>
+            //       {moment(item?.date).format('DD')}
+            //     </Text>
+            //     <Text style={styles.textDay}>
+            //       {moment(item?.date).format('LLLL').slice(0, 3)}
+            //     </Text>
+            //   </View>
+            //   <View style={styles.eventDetail}>
+            //     <Text style={styles.eventTitle}>{item?.title}</Text>
+            //     <View>
+            //       <View>
+            //         <Text style={styles.eventSubtitle}>
+            //           {item?.location}, Indonesia
+            //         </Text>
+            //       </View>
+            //       <View>
+            //         <Text style={styles.eventSubtitle}>
+            //           {moment(item?.date).format('LLLL').slice(0, 3)}
+            //           {', '}
+            //           {moment(item?.date).format('LLL')}
+            //         </Text>
+            //       </View>
+            //     </View>
+            //     <TouchableOpacity to="/ManageEvent" style={styles.linkDetail}>
+            //       Detail
+            //     </TouchableOpacity>
+            //   </View>
+            // </View>
+          );
+        })}
       </View>
     </View>
   );
