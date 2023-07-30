@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   textBtnDetail: {
-    color: '#4c3f91',
+    color: '#61764b',
     fontFamily: 'Poppins-Medium',
   },
   btnGroupEvent: {
