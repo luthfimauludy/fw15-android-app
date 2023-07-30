@@ -29,6 +29,7 @@ import ManageEvent from './ManageEvent';
 import CreateEvent from './CreateEvent';
 import {logout} from '../redux/reducers/auth';
 import UpdateEvent from './UpdateEvent';
+import SearchResults from './SearchResults';
 
 const AuthStack = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
@@ -180,6 +181,15 @@ function MyDrawer() {
         options={{
           drawerItemStyle: {display: 'none'},
           drawerLabel: 'UpdateEvent',
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
+        name="SearchResults"
+        component={SearchResults}
+        options={{
+          drawerItemStyle: {display: 'none'},
+          drawerLabel: 'SearchResults',
           headerShown: false,
         }}
       />
