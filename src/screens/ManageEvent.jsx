@@ -7,6 +7,7 @@ import {
   Modal,
   Alert,
   Pressable,
+  StatusBar,
 } from 'react-native';
 import React from 'react';
 import {useSelector} from 'react-redux';
@@ -70,6 +71,7 @@ const ManageEvent = ({navigation}) => {
 
   return (
     <ScrollView style={styles.wrapper}>
+      <StatusBar translucent={true} backgroundColor="transparent" />
       <TouchableOpacity
         onPress={handleCreateEvent}
         style={styles.createContain}>
