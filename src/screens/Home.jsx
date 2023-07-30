@@ -5,6 +5,8 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Modal,
+  Pressable,
 } from 'react-native';
 import React, {useCallback} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -21,9 +23,12 @@ import SplashScreen from 'react-native-splash-screen';
 const Home = () => {
   const navigation = useNavigation();
   const [events, setEvent] = React.useState([]);
-  const [text, onChangeText] = React.useState('');
   const deviceToken = useSelector(state => state.deviceToken.data);
   const token = useSelector(state => state.auth.token);
+  const [sortEvent, setSortEvent] = React.useState('date');
+  const [sortEventBy, setSortEventBy] = React.useState('ASC');
+  const [search, setSearch] = React.useState('');
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const saveToken = useCallback(async () => {
     const form = new URLSearchParams({token: deviceToken.token}).toString();
@@ -36,11 +41,27 @@ const Home = () => {
 
   React.useEffect(() => {
     async function getEvent() {
-      const {data} = await http().get('/events?sort=date&sortBy=asc&limit=10');
+      const {data} = await http().get(
+        `/events?sort=${sortEvent}&sortBy=${sortEventBy}&limit=10`,
+      );
       setEvent(data.results);
     }
     getEvent();
-  }, []);
+  }, [sortEvent, sortEventBy]);
+
+  const handleSortEvent = (sort, sortBy) => {
+    setModalVisible(false);
+    setSortEvent(sort);
+    setSortEventBy(sortBy);
+  };
+
+  const openModalFilter = () => {
+    setModalVisible(true);
+  };
+
+  const handleSearch = () => {
+    navigation.navigate('SearchResults', search);
+  };
 
   const uniqueDates = [...new Set(events.map(item => item?.date))];
 
@@ -62,8 +83,8 @@ const Home = () => {
         <View style={styles.ph10}>
           <TextInput
             style={styles.input}
-            onChange={onChangeText}
-            value={text}
+            onChangeText={event => setSearch(event)}
+            onSubmitEditing={() => handleSearch(search)}
             placeholder="Search Event..."
             placeholderTextColor="#C1C5D0"
           />
@@ -100,7 +121,9 @@ const Home = () => {
           <View style={styles.mainContent}>
             <View style={styles.mainHead}>
               <Text style={styles.headText}>Events For You</Text>
-              <FontAwesome name="sliders" size={25} colot="#4c3f91" />
+              <TouchableOpacity onPress={openModalFilter}>
+                <FontAwesome name="sliders" size={25} color="#61764b" />
+              </TouchableOpacity>
             </View>
             <ScrollView horizontal={true} style={styles.eventContain}>
               {events.map(item => {
@@ -154,6 +177,32 @@ const Home = () => {
               })}
             </View>
           </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Sort Event By :</Text>
+                <Pressable onPress={() => handleSortEvent('date', 'ASC')}>
+                  <Text style={styles.textStyleItem}>Latest Event</Text>
+                </Pressable>
+                <Pressable onPress={() => handleSortEvent('title', 'ASC')}>
+                  <Text style={styles.textStyleItem}>Event Name (A/Z)</Text>
+                </Pressable>
+                <Pressable onPress={() => handleSortEvent('title', 'DESC')}>
+                  <Text style={styles.textStyleItem}>Event Name (Z/A)</Text>
+                </Pressable>
+                <View style={styles.wrapModalBtn}>
+                  <Pressable
+                    style={[styles.button, styles.buttonOpen]}
+                    onPress={() => setModalVisible(!modalVisible)}>
+                    <Text style={styles.textStyleNo}>Cancel</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
       </View>
     </ScrollView>
@@ -162,7 +211,6 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingTop: 30,
     flex: 1,
     backgroundColor: '#61764b',
   },
@@ -315,7 +363,7 @@ const styles = StyleSheet.create({
   buttonUpcoming: {
     backgroundColor: 'white',
     borderWidth: 2,
-    borderColor: 'blue',
+    borderColor: '#61764b',
     borderRadius: 10,
     marginTop: 20,
     marginBottom: 50,
@@ -326,12 +374,62 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textButton: {
-    color: 'blue',
+    color: '#61764b',
     fontWeight: 'bold',
   },
   contentUpcoming: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: 300,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  textStyleItem: {
+    color: '#000',
+    fontFamily: 'Poppins-SemiBold',
+    height: 30,
+  },
+  wrapModalBtn: {
+    flexDirection: 'row',
+    gap: 15,
+    marginTop: 10,
+  },
+  button: {
+    marginTop: 10,
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#b6e5a8',
+  },
+  textStyleNo: {
+    color: '#49be25',
+    fontFamily: 'Poppins-SemiBold',
+    textAlign: 'center',
   },
 });
 
