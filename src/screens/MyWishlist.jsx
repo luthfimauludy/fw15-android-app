@@ -4,51 +4,76 @@ import Icon from 'react-native-vector-icons/Feather';
 import http from '../helpers/http';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
+import EventList from '../components/EventList';
 
 const MyWishlist = () => {
   const [wishlists, setWishlists] = React.useState([]);
   const token = useSelector(state => state.auth.token);
+  console.log(wishlists);
+
+  const getWishlists = React.useCallback(async () => {
+    const {data} = await http(token).get('/wishlists');
+    setWishlists(data.results);
+  }, [token]);
 
   React.useEffect(() => {
-    async function getWishlists() {
-      const {data} = await http(token).get('/wishlists');
-      setWishlists(data.results);
-    }
     getWishlists();
-  }, [token]);
+  }, [getWishlists]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const {data} = await http(token).get('/wishlists');
+        setWishlists(data.results);
+      };
+      fetchData();
+    }, [token]),
+  );
+
+  const addRemoveWishlist = async id => {
+    try {
+      const {data} = await http(token).delete(`/wishlists/${id}`);
+      if (data.results) {
+        console.log(data.results);
+      }
+      getWishlists();
+    } catch (err) {
+      const message = err?.response?.data?.message;
+      if (message) {
+        console.log(message);
+      }
+    }
+  };
 
   return (
     <View style={styles.wrapper}>
-      {wishlists.map(item => {
-        return (
-          <View key={`wishlist-${item?.id}`} style={styles.eventContain}>
-            <View style={styles.spaceBetween}>
-              <View style={styles.eventDate}>
-                <Text style={styles.textOrange}>
-                  {moment(item.date).format('DD')}
-                </Text>
-                <Text style={styles.textDay}>
-                  {moment(item.date).format('ddd')}
-                </Text>
-              </View>
-              <View>
-                <Icon name="heart" size={25} color="#61764b" />
-              </View>
-            </View>
-            <View style={styles.eventDetail}>
-              <Text style={styles.eventTitle}>{item?.title}</Text>
-              <View>
-                <Text style={styles.eventSubtitle}>
-                  {item?.location}, Indonesia
-                </Text>
-                <Text style={styles.eventSubtitle}>
-                  {moment(item.date).format('LLL')}
-                </Text>
-              </View>
-            </View>
+      <View style={styles.eventContain}>
+        {wishlists.length < 1 && (
+          <View style={styles.eventDetail}>
+            <Text style={styles.eventTitle}>No wishlist found</Text>
+            <Text style={styles.eventSubtitle}>
+              It appears you haven’t found any wishlists yet. Maybe try
+              searching these?
+            </Text>
           </View>
-        );
-      })}
+        )}
+        {wishlists.map(item => {
+          return (
+            <EventList
+              key={`manage-wishlist-${item?.wishlistId}`}
+              contentDate={item?.date}
+              contentDay={item?.date}
+              title={item?.title}
+              location={item?.location}
+              date={item?.date}
+              day={item?.date}
+              forWishlist
+              addRemoveWishlist={() => addRemoveWishlist(`${item.wishlistId}`)}
+            />
+          );
+        })}
+      </View>
     </View>
   );
 };
@@ -61,7 +86,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   eventContain: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: 20,
     marginTop: 20,
   },
@@ -82,12 +107,14 @@ const styles = StyleSheet.create({
     color: '#373A42',
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
     lineHeight: 36,
     letterSpacing: 2,
   },
   eventSubtitle: {
     color: '#373A42BF',
     fontSize: 12,
+    textAlign: 'center',
     lineHeight: 27,
   },
   linkDetail: {
