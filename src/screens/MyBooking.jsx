@@ -54,36 +54,6 @@ const MyBooking = ({navigation}) => {
               forMyBooking
               transactionDetail={() => handlePressDetail(item.id)}
             />
-            // <View key={`manage-booking-${item.id}`}>
-            //   <View style={styles.eventDate}>
-            //     <Text style={styles.textOrange}>
-            //       {moment(item?.date).format('DD')}
-            //     </Text>
-            //     <Text style={styles.textDay}>
-            //       {moment(item?.date).format('LLLL').slice(0, 3)}
-            //     </Text>
-            //   </View>
-            //   <View style={styles.eventDetail}>
-            //     <Text style={styles.eventTitle}>{item?.title}</Text>
-            //     <View>
-            //       <View>
-            //         <Text style={styles.eventSubtitle}>
-            //           {item?.location}, Indonesia
-            //         </Text>
-            //       </View>
-            //       <View>
-            //         <Text style={styles.eventSubtitle}>
-            //           {moment(item?.date).format('LLLL').slice(0, 3)}
-            //           {', '}
-            //           {moment(item?.date).format('LLL')}
-            //         </Text>
-            //       </View>
-            //     </View>
-            //     <TouchableOpacity to="/ManageEvent" style={styles.linkDetail}>
-            //       Detail
-            //     </TouchableOpacity>
-            //   </View>
-            // </View>
           );
         })}
       </View>
