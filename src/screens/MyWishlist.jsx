@@ -8,7 +8,6 @@ import EventList from '../components/EventList';
 const MyWishlist = () => {
   const [wishlists, setWishlists] = React.useState([]);
   const token = useSelector(state => state.auth.token);
-  console.log(wishlists);
 
   const getWishlists = React.useCallback(async () => {
     const {data} = await http(token).get('/wishlists');
