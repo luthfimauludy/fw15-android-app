@@ -1,8 +1,6 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
-import Icon from 'react-native-vector-icons/Feather';
 import http from '../helpers/http';
-import moment from 'moment';
 import {useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
 import EventList from '../components/EventList';
