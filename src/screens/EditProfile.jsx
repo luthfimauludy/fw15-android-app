@@ -20,14 +20,15 @@ import ImageTemplate from '../components/ImageTemplate';
 import {defaultPic} from '../assets';
 import globalStyles from '../assets/globalStyles';
 
-// const defaultPic = require('../assets/img/default-picture.jpg');
-
 const EditProfile = ({navigation}) => {
   const token = useSelector(state => state.auth.token);
   const [editFullName, setEditFullName] = React.useState(false);
   const [editEmail, setEditEmail] = React.useState(false);
-  const [gender, setGender] = React.useState('0');
+  // const [gender, setGender] = React.useState('0');
   const [editPhoneNumber, setEditPhoneNumber] = React.useState(false);
+  const [editGender, setEditGender] = React.useState(false);
+  const [isMale, setIsMale] = React.useState(false);
+  const [isFemale, setIsFemale] = React.useState(false);
   const [editProfession, setEditProfession] = React.useState('');
   const [editNasionality, setEditNasionality] = React.useState('');
   const [editBirthDate, setEditBirthDate] = React.useState(false);
@@ -50,11 +51,6 @@ const EditProfile = ({navigation}) => {
     {label: 'Singapore', value: 'Singapore'},
   ]);
 
-  // const changeNasionality = (value, handleChange) => {
-  //   handleChange(value);
-  //   setNasionalityValue(value);
-  // };
-
   React.useEffect(() => {
     const getProfile = async () => {
       const {data} = await http(token).get('/profile');
@@ -63,9 +59,9 @@ const EditProfile = ({navigation}) => {
     getProfile();
   }, [token]);
 
-  const handleRadioPress = value => {
-    setGender(value);
-  };
+  // const handleRadioPress = value => {
+  //   setGender(value);
+  // };
 
   const doEditProfile = async values => {
     const form = new FormData();
@@ -83,6 +79,14 @@ const EditProfile = ({navigation}) => {
 
     if (fileResponse.length > 1) {
       form.append('picture', fileImage);
+    }
+
+    if (isMale === true) {
+      form.append('gender', 0);
+    }
+
+    if (isFemale === true) {
+      form.append('gender', 1);
     }
 
     const getProfile = async () => {
@@ -105,7 +109,7 @@ const EditProfile = ({navigation}) => {
     setEditFullName(false);
     setEditEmail(false);
     setEditPhoneNumber(false);
-    setGender(false);
+    setEditGender(false);
     setEditProfession(false);
     setEditNasionality(false);
     setEditBirthDate(false);
@@ -159,7 +163,6 @@ const EditProfile = ({navigation}) => {
             fullName: profile?.fullName,
             email: profile?.email,
             phoneNumber: profile?.phoneNumber,
-            gender: profile?.gender ? '1' : '0',
             profession: profile?.profession,
             nasionality: profile?.nasionality,
             birthDate:
@@ -281,6 +284,59 @@ const EditProfile = ({navigation}) => {
               </View>
               <View style={style.nameCont}>
                 <Text style={style.title}>Gender</Text>
+                {editGender && (
+                  <View style={style.directionRow}>
+                    <View style={style.flexContGender}>
+                      <RadioButton
+                        value="0"
+                        status={isMale ? 'checked' : 'unchecked'}
+                        onPress={function () {
+                          setIsMale(!isMale);
+                          setIsFemale(false);
+                        }}
+                      />
+                      <Text
+                        onPress={function () {
+                          setIsMale(!isMale);
+                          setIsFemale(false);
+                        }}>
+                        Male
+                      </Text>
+                    </View>
+                    <View style={style.flexContGender}>
+                      <RadioButton
+                        value="1"
+                        status={isFemale ? 'checked' : 'unchecked'}
+                        onPress={function () {
+                          setIsFemale(!isFemale);
+                          setIsMale(false);
+                        }}
+                      />
+                      <Text
+                        onPress={function () {
+                          setIsFemale(!isFemale);
+                          setIsMale(false);
+                        }}>
+                        Female
+                      </Text>
+                    </View>
+                  </View>
+                )}
+                {!editGender && (
+                  <View style={style.textBetween}>
+                    <View style={style.flexContGender}>
+                      <Text>{profile?.gender ? 'Female' : 'Male'}</Text>
+                    </View>
+                    <Text
+                      style={style.textEdit}
+                      onPress={() => setEditGender(true)}>
+                      Edit
+                    </Text>
+                  </View>
+                )}
+              </View>
+              {/* <View style={style.nameCont}>
+                <Text style={style.title}>Gender</Text>
                 <RadioButton.Group
                   onValueChange={handleRadioPress}
                   value={gender}>
@@ -295,7 +351,7 @@ const EditProfile = ({navigation}) => {
                     </View>
                   </View>
                 </RadioButton.Group>
-              </View>
+              </View> */}
               <View style={style.nameCont}>
                 <Text style={style.title}>Profession</Text>
                 <View style={style.flexCont}>
@@ -446,6 +502,11 @@ const style = StyleSheet.create({
   flexContGender: {
     flexDirection: 'row',
     gap: 5,
+    alignItems: 'center',
+  },
+  textBetween: {
+    flexDirection: 'row',
+    gap: 10,
     alignItems: 'center',
   },
   textEdit: {
