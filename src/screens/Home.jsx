@@ -211,6 +211,7 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   wrapper: {
+    paddingTop: 20,
     flex: 1,
     backgroundColor: '#61764b',
   },
