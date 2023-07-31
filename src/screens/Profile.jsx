@@ -7,7 +7,7 @@ import {
   Image,
 } from 'react-native';
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import {useSelector} from 'react-redux';
@@ -21,21 +21,15 @@ const Profile = () => {
   const [profile, setProfile] = React.useState({});
   const navigation = useNavigation();
 
-  React.useEffect(() => {
-    async function getProfileUser() {
-      try {
+  useFocusEffect(
+    React.useCallback(() => {
+      const getProfileUser = async () => {
         const {data} = await http(token).get('/profile');
         setProfile(data.results);
-        console(data.results);
-      } catch (error) {
-        const message = error?.response?.data?.message;
-        if (message) {
-          console.log(message);
-        }
-      }
-    }
-    getProfileUser();
-  }, [token]);
+      };
+      getProfileUser();
+    }, [token]),
+  );
 
   return (
     <ScrollView style={style.container}>
