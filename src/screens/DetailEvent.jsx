@@ -4,19 +4,20 @@ import {
   Text,
   StyleSheet,
   Image,
-  ImageBackground,
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Link, useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import Button from '../components/Button';
 import {useSelector} from 'react-redux';
 import http from '../helpers/http';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 import globalStyles from '../assets/globalStyles';
+import ImageTemplate from '../components/ImageTemplate';
+import {eventDummy} from '../assets/img/index';
 
 const maps = require('../assets/img/maps.png');
 const DetailEvent = ({route, navigation}) => {
@@ -40,7 +41,7 @@ const DetailEvent = ({route, navigation}) => {
       const eventId = {eventId: id};
       const qs = new URLSearchParams(eventId).toString();
       const fetchData = async () => {
-        const {data} = await http(token).get(`/wishlist/check?${qs}`);
+        const {data} = await http(token).get(`/wishlists/check?${qs}`);
         const btnStatus = data.results;
         if (btnStatus) {
           setWishlistBtn(true);
@@ -79,7 +80,10 @@ const DetailEvent = ({route, navigation}) => {
     <ScrollView style={styles.wrapper}>
       <View>
         <View style={globalStyles.boxEventDetail}>
-          <Image style={globalStyles.img} source={{uri: eventDetail.picture}} />
+          <ImageTemplate
+            src={eventDetail?.picture || null}
+            defaultImg={eventDummy}
+          />
           <View style={globalStyles.navContainerEventDetail}>
             <View>
               <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -97,7 +101,9 @@ const DetailEvent = ({route, navigation}) => {
             </View>
           </View>
           <LinearGradient
-            colors={['#61616122', '#78787899', '#3c3c3c']}
+            colors={['#000000', 'rgba(0, 0, 0, 0)']}
+            start={{x: 0, y: 1}}
+            end={{x: 0, y: 0}}
             style={globalStyles.wrapperTitleText}>
             <View>
               <Text style={styles.eventTitle}>{eventDetail?.title}</Text>
