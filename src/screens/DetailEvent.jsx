@@ -15,6 +15,8 @@ import Button from '../components/Button';
 import {useSelector} from 'react-redux';
 import http from '../helpers/http';
 import moment from 'moment';
+import LinearGradient from 'react-native-linear-gradient';
+import globalStyles from '../assets/globalStyles';
 
 const maps = require('../assets/img/maps.png');
 const DetailEvent = ({route, navigation}) => {
@@ -75,29 +77,30 @@ const DetailEvent = ({route, navigation}) => {
 
   return (
     <ScrollView style={styles.wrapper}>
-      <ImageBackground src={eventDetail?.picture} style={styles.imgBackground}>
-        <View style={styles.flexRow}>
-          <View>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-              <Feather name="arrow-left" size={25} color="#FFF" />
-            </TouchableOpacity>
-          </View>
-          <View>
-            <TouchableOpacity onPress={addRemoveWishlist}>
-              {wishlistBtn === true ? (
-                <FontAwesome name="heart" size={25} color="red" />
-              ) : (
-                <FontAwesome name="heart-o" size={25} color="#FFF" />
-              )}
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.paddingTop50}>
-          <View style={styles.eventBanner}>
+      <View>
+        <View style={globalStyles.boxEventDetail}>
+          <Image style={globalStyles.img} source={{uri: eventDetail.picture}} />
+          <View style={globalStyles.navContainerEventDetail}>
             <View>
-              <Link to="/Booking" style={styles.eventTitle}>
-                {eventDetail?.title}
-              </Link>
+              <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                <Feather name="arrow-left" size={25} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity onPress={addRemoveWishlist}>
+                {wishlistBtn === true ? (
+                  <FontAwesome name="heart" size={25} color="red" />
+                ) : (
+                  <FontAwesome name="heart-o" size={25} color="#FFF" />
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+          <LinearGradient
+            colors={['#61616122', '#78787899', '#3c3c3c']}
+            style={globalStyles.wrapperTitleText}>
+            <View>
+              <Text style={styles.eventTitle}>{eventDetail?.title}</Text>
             </View>
             <View style={styles.eventInfo}>
               <Feather name="map-pin" size={25} color="#FC1055" />
@@ -116,25 +119,25 @@ const DetailEvent = ({route, navigation}) => {
             <View>
               <Text style={styles.whiteText}>Attendees</Text>
             </View>
+          </LinearGradient>
+        </View>
+        <View style={styles.eventDetail}>
+          <View>
+            <Text style={styles.headText}>Event Detail</Text>
+            <Text style={styles.innerText}>
+              After his controversial art exhibition "Tear and Consume" back in
+              November 2018, in which guests were invited to tear up…
+            </Text>
           </View>
-          <View style={styles.eventDetail}>
-            <View>
-              <Text style={styles.headText}>Event Detail</Text>
-              <Text style={styles.innerText}>
-                After his controversial art exhibition "Tear and Consume" back
-                in November 2018, in which guests were invited to tear up…
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.headText}>Location</Text>
-              <Image source={maps} />
-            </View>
-            <View>
-              <Button onPress={() => handlePressEvent(id)}>Buy Tickets</Button>
-            </View>
+          <View>
+            <Text style={styles.headText}>Location</Text>
+            <Image source={maps} />
+          </View>
+          <View>
+            <Button onPress={() => handlePressEvent(id)}>Buy Tickets</Button>
           </View>
         </View>
-      </ImageBackground>
+      </View>
     </ScrollView>
   );
 };
@@ -142,9 +145,6 @@ const DetailEvent = ({route, navigation}) => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-  },
-  paddingTop50: {
-    paddingTop: 50,
   },
   flexRow: {
     flexDirection: 'row',
@@ -188,9 +188,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 20,
     paddingHorizontal: 20,
-    marginTop: 30,
     borderTopStartRadius: 30,
     borderTopEndRadius: 30,
+    marginTop: -25,
   },
   headText: {
     color: 'black',
