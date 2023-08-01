@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   eventContain: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: 20,
     marginTop: 20,
   },
