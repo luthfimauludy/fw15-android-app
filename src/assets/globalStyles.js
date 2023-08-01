@@ -62,6 +62,37 @@ const globalStyles = StyleSheet.create({
     fontSize: 20,
     letterSpacing: 1,
   },
+  boxEventDetail: {
+    position: 'relative',
+    height: 350,
+    gap: 10,
+    overflow: 'hidden',
+  },
+  img: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+  },
+  navContainerEventDetail: {
+    paddingHorizontal: 10,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    top: 10,
+    zIndex: 1,
+  },
+  wrapperTitleText: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    gap: 10,
+    height: '100%',
+    width: '100%',
+    paddingLeft: 25,
+    paddingTop: 140,
+    backgroundColor: 'transparent',
+  },
 });
 
 export default globalStyles;
