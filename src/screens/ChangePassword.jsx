@@ -38,7 +38,6 @@ const ChangePassword = ({navigation}) => {
     }).toString();
     try {
       const {data} = await http(token).patch('/change-password', form);
-      console.log(data);
       if (data?.message) {
         setSuccessMessage(data?.message);
         setTimeout(() => navigation.navigate('Profile'), 2000);

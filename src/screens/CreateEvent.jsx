@@ -68,7 +68,6 @@ const CreateEvent = ({navigation}) => {
       });
     }
     const data = results.assets[0];
-    console.log(data);
     if (data.uri) {
       setSelectedPicture({
         name: data.fileName,

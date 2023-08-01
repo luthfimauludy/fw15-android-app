@@ -19,7 +19,6 @@ const MyBooking = ({navigation}) => {
       fetchData();
     }, [token]),
   );
-  console.log(typeof histories);
 
   const handlePressDetail = id => {
     navigation.navigate('DetailTransaction', {id});
