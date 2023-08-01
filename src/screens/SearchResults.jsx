@@ -342,7 +342,7 @@ const style = StyleSheet.create({
   },
   dataProfileWrapper: {
     gap: 20,
-    marginBottom: 120,
+    marginBottom: 20,
   },
   formInput: {
     width: '100%',
