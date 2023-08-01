@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import {useFocusEffect} from '@react-navigation/native';
@@ -13,7 +13,7 @@ const MyBooking = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
-        const {data} = await http(token).get('/history');
+        const {data} = await http(token).get('/history?limit=10');
         setHistories(data.results);
       };
       fetchData();
@@ -25,7 +25,7 @@ const MyBooking = ({navigation}) => {
   };
 
   return (
-    <View style={styles.wrapper}>
+    <ScrollView style={styles.wrapper}>
       <View style={styles.calendarContain}>
         <Icon name="calendar" size={25} color="#61764b" />
         <Text style={styles.textMonth}>March</Text>
@@ -56,7 +56,7 @@ const MyBooking = ({navigation}) => {
           );
         })}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
