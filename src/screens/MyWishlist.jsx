@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import http from '../helpers/http';
 import {useSelector} from 'react-redux';
@@ -45,7 +45,7 @@ const MyWishlist = () => {
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.eventContain}>
+      <ScrollView style={styles.eventContain}>
         {wishlists.length < 1 && (
           <View style={styles.eventDetail}>
             <Text style={styles.eventTitle}>No wishlist found</Text>
@@ -70,7 +70,7 @@ const MyWishlist = () => {
             />
           );
         })}
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -86,15 +86,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 20,
     marginTop: 20,
-  },
-  eventDate: {
-    alignItems: 'center',
-  },
-  textOrange: {
-    color: '#FF8900',
-  },
-  textDay: {
-    color: '#C1C5D0',
   },
   eventDetail: {
     flexDirection: 'column',
@@ -113,15 +104,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
     lineHeight: 27,
-  },
-  linkDetail: {
-    color: '#61764b',
-    fontSize: 12,
-  },
-  spaceBetween: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    paddingVertical: 15,
   },
 });
 
